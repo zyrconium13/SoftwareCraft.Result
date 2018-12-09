@@ -3,6 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>SoftwareCraft.Functional</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0.0</Version>
+    <Authors>SoftwareCraft</Authors>
+    <Company>SoftwareCraft</Company>
+    <PackageProjectUrl>https://github.com/zyrconium13/SoftwareCraft.Result</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/zyrconium13/SoftwareCraft.Result</RepositoryUrl>
+    <PackageTags>result c-sharp functional-programming dotnetcore</PackageTags>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>SoftwareCraftKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
 </Project>
