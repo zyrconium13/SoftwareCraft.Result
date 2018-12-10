@@ -3,26 +3,23 @@ using System.Linq;
 
 namespace SoftwareCraft.Functional
 {
-	public class Error<TValue, TError> : Result<TValue, TError>
+	public class Success<TValue, TError> : Result<TValue, TError>
 	{
-		public Error(TError error)
+		public Success(TValue value)
 		{
-			InnerError = new[] {error};
+			InnerValue = new[] {value};
 		}
-
-		public override bool IsSuccess => false;
-		public override bool IsError => true;
 
 		public override Result<TValue, TError> OnSuccess(Action<TValue> onSuccess)
 		{
-			// Do nothing
+			onSuccess(InnerValue[0]);
+
 			return this;
 		}
 
 		public override Result<TValue, TError> OnError(Action<TError> onError)
 		{
-			onError(InnerError[0]);
-
+			// Do nothing
 			return this;
 		}
 

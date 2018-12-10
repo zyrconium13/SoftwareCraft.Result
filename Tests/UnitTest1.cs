@@ -11,7 +11,6 @@ namespace Tests
 		[TestMethod]
 		public void TestMethod1()
 		{
-			Result.Error<int, string>("mumu");
 		}
 	}
 }

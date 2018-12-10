@@ -3,25 +3,19 @@ using System.Linq;
 
 namespace SoftwareCraft.Functional
 {
-	public abstract class Result<TValue, TError>
+	public abstract class Result<TError>
 	{
 		protected TError[] InnerError;
 
-		protected TValue[] InnerValue;
-
 		protected Result()
 		{
-			InnerValue = new TValue[0];
 			InnerError = new TError[0];
 		}
 
-		public abstract bool IsSuccess { get; }
-		public abstract bool IsError { get; }
+		public abstract Result<TError> OnSuccess(Action onSuccess);
 
-		public abstract Result<TValue, TError> OnSuccess(Action<TValue> onSuccess);
+		public abstract Result<TError> OnError(Action<TError> onError);
 
-		public abstract Result<TValue, TError> OnError(Action<TError> onError);
-
-		public abstract Result<TValue, TError> OnBoth(Action onBoth);
+		public abstract Result<TError> OnBoth(Action onBoth);
 	}
 }

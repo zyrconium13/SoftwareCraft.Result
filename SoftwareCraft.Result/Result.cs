@@ -14,5 +14,15 @@ namespace SoftwareCraft.Functional
 		{
 			return new Error<TValue, TError>(error);
 		}
+
+		public static Result<TError> Success<TError>()
+		{
+			return new Success<TError>();
+		}
+
+		public static Result<TError> Error<TError>(TError error)
+		{
+			return new Error<TError>(error);
+		}
 	}
 }
