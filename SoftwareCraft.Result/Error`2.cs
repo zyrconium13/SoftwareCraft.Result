@@ -5,27 +5,18 @@ namespace SoftwareCraft.Functional
 {
 	public class Error<TValue, TError> : Result<TValue, TError>
 	{
+		private readonly TError error;
+
 		public Error(TError error)
 		{
-			InnerError = new[] {error};
-		}
+			Validate(error);
 
-		public override Result<TValue, TError> OnSuccess(Action<TValue> onSuccess)
-		{
-			// Do nothing
-			return this;
+			this.error = error;
 		}
 
 		public override Result<TValue, TError> OnError(Action<TError> onError)
 		{
-			onError(InnerError[0]);
-
-			return this;
-		}
-
-		public override Result<TValue, TError> OnBoth(Action onBoth)
-		{
-			onBoth();
+			onError(error);
 
 			return this;
 		}

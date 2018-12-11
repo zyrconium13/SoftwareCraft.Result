@@ -11,19 +11,5 @@ namespace SoftwareCraft.Functional
 
 			return this;
 		}
-
-		public override Result<TError> OnError(Action<TError> onError)
-		{
-			// Do nothing
-
-			return this;
-		}
-
-		public override Result<TError> OnBoth(Action onBoth)
-		{
-			onBoth();
-
-			return this;
-		}
 	}
 }

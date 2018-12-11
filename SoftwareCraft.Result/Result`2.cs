@@ -1,24 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SoftwareCraft.Functional
 {
 	public abstract class Result<TValue, TError>
 	{
-		protected TError[] InnerError;
+		public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
 
-		protected TValue[] InnerValue;
+		public virtual Result<TValue, TError> OnError(Action<TError> onError) => this;
 
-		protected Result()
+		public virtual Result<TValue, TError> OnBoth(Action onBoth)
 		{
-			InnerValue = new TValue[0];
-			InnerError = new TError[0];
+			onBoth();
+
+			return this;
 		}
 
-		public abstract Result<TValue, TError> OnSuccess(Action<TValue> onSuccess);
+		private protected static void Validate<T>(T value)
+		{
+			var isNotValueType = !typeof(T).IsValueType;
+			var isNullableValueType = Nullable.GetUnderlyingType(typeof(T)) != null;
+			var hasDefaultValue = EqualityComparer<T>.Default.Equals(value, default);
 
-		public abstract Result<TValue, TError> OnError(Action<TError> onError);
-
-		public abstract Result<TValue, TError> OnBoth(Action onBoth);
+			if ((isNotValueType || isNullableValueType) && hasDefaultValue)
+				throw new InvalidOperationException();
+		}
 	}
 }
