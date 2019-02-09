@@ -17,6 +17,8 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
+		public abstract Result<UValue, UError> Map<UValue, UError>(Func<TValue, UValue> mapValue, Func<TError, UError> mapError);
+
 		private protected static void Validate<T>(T value)
 		{
 			var isNotValueType = !typeof(T).IsValueType;

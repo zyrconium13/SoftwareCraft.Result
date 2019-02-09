@@ -20,5 +20,9 @@ namespace SoftwareCraft.Functional
 
 			return this;
 		}
+
+		public override Result<UValue, UError> Map<UValue, UError>(Func<TValue, UValue> mapValue,
+			Func<TError, UError> mapError) =>
+			Result.Error<UValue, UError>(mapError(error));
 	}
 }
