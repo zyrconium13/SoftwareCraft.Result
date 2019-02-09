@@ -17,7 +17,11 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
-		public abstract Result<UError> Map<UError>(Func<TError, UError> mapError);
+		public abstract void Match(Action matchValue, Action<TError> matchError);
+
+		public abstract Result<UError> Select<UError>(Func<TError, UError> mapError);
+
+		public abstract Result<UError> SelectMany<UError>(Func<TError, Result<UError>> mapError);
 
 		private protected static void Validate<T>(T value)
 		{

@@ -12,6 +12,15 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
-		public override Result<UError> Map<UError>(Func<TError, UError> mapError) => Result.Success<UError>();
+		public override void Match(Action matchValue, Action<TError> matchError)
+		{
+			matchValue();
+		}
+
+		public override Result<UError> Select<UError>(Func<TError, UError> mapError) =>
+			Result.Success<UError>();
+
+		public override Result<UError> SelectMany<UError>(Func<TError, Result<UError>> mapError) =>
+			Result.Success<UError>();
 	}
 }
