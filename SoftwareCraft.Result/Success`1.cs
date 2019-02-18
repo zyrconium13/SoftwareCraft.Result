@@ -12,10 +12,9 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
-		public override void Match(Action matchValue, Action<TError> matchError)
-		{
-			matchValue();
-		}
+		public override void Match(Action matchValue, Action<TError> matchError) => matchValue();
+
+		public override TOut Match<TOut>(Func<TOut> matchValue, Func<TError, TOut> matchError) => matchValue();
 
 		public override Result<UError> Select<UError>(Func<TError, UError> mapError) =>
 			Result.Success<UError>();

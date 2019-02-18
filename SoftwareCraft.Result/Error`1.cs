@@ -21,10 +21,9 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
-		public override void Match(Action matchValue, Action<TError> matchError)
-		{
-			matchError(error);
-		}
+		public override void Match(Action matchValue, Action<TError> matchError) => matchError(error);
+
+		public override TOut Match<TOut>(Func<TOut> matchValue, Func<TError, TOut> matchError) => matchError(error);
 
 		public override Result<UError> Select<UError>(Func<TError, UError> mapError) => Result.Error(mapError(error));
 

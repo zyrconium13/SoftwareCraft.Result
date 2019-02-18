@@ -5,14 +5,20 @@
     <RootNamespace>SoftwareCraft.Functional</RootNamespace>
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.0</Version>
+    <Version>2.0.0.0</Version>
     <Authors>SoftwareCraft</Authors>
     <Company>SoftwareCraft</Company>
     <PackageProjectUrl>https://github.com/zyrconium13/SoftwareCraft.Result</PackageProjectUrl>
     <RepositoryUrl>https://github.com/zyrconium13/SoftwareCraft.Result</RepositoryUrl>
     <PackageTags>result c-sharp functional-programming dotnetcore</PackageTags>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>SoftwareCraftKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>D:\OneDrive\Documents\SoftwareCraftKey\SoftwareCraftKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="D:\OneDrive\Documents\SoftwareCraftKey\SoftwareCraftKey.snk" Link="SoftwareCraftKey.snk" />
+  </ItemGroup>
 
 </Project>

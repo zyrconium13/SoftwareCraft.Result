@@ -19,6 +19,8 @@ namespace SoftwareCraft.Functional
 
 		public abstract void Match(Action<TValue> matchValue, Action<TError> matchError);
 
+		public abstract TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError);
+
 		public abstract Result<UValue, UError> Select<UValue, UError>(
 			Func<TValue, UValue> mapValue,
 			Func<TError, UError> mapError);

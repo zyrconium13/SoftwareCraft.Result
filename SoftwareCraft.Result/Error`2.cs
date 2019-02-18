@@ -21,10 +21,11 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
-		public override void Match(Action<TValue> matchValue, Action<TError> matchError)
-		{
+		public override void Match(Action<TValue> matchValue, Action<TError> matchError) =>
 			matchError(error);
-		}
+
+		public override TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError) =>
+			matchError(error);
 
 		public override Result<UValue, UError> Select<UValue, UError>(
 			Func<TValue, UValue> mapValue,
