@@ -10,11 +10,13 @@
     <Company>SoftwareCraft</Company>
     <PackageProjectUrl>https://github.com/zyrconium13/SoftwareCraft.Result</PackageProjectUrl>
     <RepositoryUrl>https://github.com/zyrconium13/SoftwareCraft.Result</RepositoryUrl>
-    <PackageTags>result c-sharp functional-programming dotnetcore</PackageTags>
+    <PackageTags>result c-sharp functional-programming dotnet core standard</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>D:\OneDrive\Documents\SoftwareCraftKey\SoftwareCraftKey.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <FileVersion>2.0.0.0</FileVersion>
+    <Description>SoftwareCraft.Result represents the OOP implementation of a functional concept. Instead of throwing an exception, return a Result, and the code will be much cleaner and the intent much clearer.</Description>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
