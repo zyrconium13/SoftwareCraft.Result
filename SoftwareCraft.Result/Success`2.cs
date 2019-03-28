@@ -36,5 +36,12 @@ namespace SoftwareCraft.Functional
 			Func<TValue, Result<UValue, UError>> mapValue,
 			Func<TError, Result<UValue, UError>> mapError) =>
 			mapValue(value);
+
+		public override Result<Tuple<TValue, UValue>, TError> Join<UValue>(Func<Result<UValue, TError>> other)
+		{
+			return other().Match<Result<Tuple<TValue, UValue>, TError>>(
+				uValue => new Success<Tuple<TValue, UValue>, TError>(Tuple.Create(value, uValue)),
+				error => new Error<Tuple<TValue, UValue>, TError>(error));
+		}
 	}
 }

@@ -19,8 +19,6 @@ namespace ConsoleApp1
 
 		private static void Main(string[] args)
 		{
-			//Result.Success<Person, string>(null);
-			//Result.Success<int?, string>(null);
 			Result.Success<int, string>(0);
 
 			ValidateValue1((int?) 0);
@@ -56,6 +54,4 @@ namespace ConsoleApp1
 			await Task.CompletedTask;
 		}
 	}
-
-	internal class Person { }
 }

@@ -29,6 +29,8 @@ namespace SoftwareCraft.Functional
 			Func<TValue, Result<UValue, UError>> mapValue,
 			Func<TError, Result<UValue, UError>> mapError);
 
+		public abstract Result<Tuple<TValue, UValue>, TError> Join<UValue>(Func<Result<UValue, TError>> other);
+
 		private protected static void Validate<T>(T value)
 		{
 			var isNotValueType = !typeof(T).IsValueType;
