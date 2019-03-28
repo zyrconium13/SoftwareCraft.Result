@@ -29,7 +29,7 @@ namespace SoftwareCraft.Functional
 			Func<TValue, Result<UValue, UError>> mapValue,
 			Func<TError, Result<UValue, UError>> mapError);
 
-		public abstract Result<Tuple<TValue, UValue>, TError> Join<UValue>(Func<Result<UValue, TError>> other);
+		public abstract Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other, Func<TValue, UValue, TAggregate> aggregator);
 
 		private protected static void Validate<T>(T value)
 		{

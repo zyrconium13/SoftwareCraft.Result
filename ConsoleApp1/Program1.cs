@@ -8,23 +8,9 @@ namespace ConsoleApp1
 	{
 		private static void Main(string[] args)
 		{
-			String50.Create(
-					"Eduard Eduard Eduard Eduard Eduard Eduard Eduard Eduard Eduard Eduard Eduard Eduard Eduard Eduard Eduard ")
-				.Join(() => String50.Create("Popescu"))
-				.Join(() => Birthdate.Create(new DateTime(1982, 03, 05)))
-				.Match(tuple => Console.WriteLine(new Person(tuple.Item1.Item1, tuple.Item1.Item2, tuple.Item2)),
-					Console.WriteLine);
+			var person = Person.Create("Eduard", "Popescu", new DateTime(1982, 3, 5));
 
-			//String50.Create("Eduard")
-			//	.Match(firstName => String50.Create("Popescu")
-			//			.Match(lastName => Birthdate.Create(new DateTime(1982, 03, 05))
-			//					.Match(birthdate =>
-			//							Result.Success<Person, string>(new Person(firstName, lastName, birthdate)),
-			//						Result.Error<Person, string>),
-			//				Result.Error<Person, string>),
-			//		Result.Error<Person, string>)
-			//	.Match(person => { Console.WriteLine(person); },
-			//		error => Console.WriteLine($"Could not create a Person because {error}"));
+			person.Match(Console.WriteLine, Console.WriteLine);
 		}
 	}
 
@@ -74,5 +60,15 @@ namespace ConsoleApp1
 		public Birthdate Birthdate { get; }
 
 		public override string ToString() => $"{FirstName.Value} {LastName.Value} born {Birthdate.Value:d}";
+
+		public static Result<Person, string> Create(string firstName, string lastName, DateTime birthdate)
+		{
+			return String50.Create(firstName)
+				.Join(() => String50.Create(lastName), (f, l) => (firstName: f, lastName: l))
+				.Join(() => Birthdate.Create(birthdate),
+					(agg, b) => (firstName: agg.firstName, lastName: agg.lastName, birthdate: b))
+				.Match(agg => Result.Success<Person, string>(new Person(agg.firstName, agg.lastName, agg.birthdate)),
+					Result.Error<Person, string>);
+		}
 	}
 }

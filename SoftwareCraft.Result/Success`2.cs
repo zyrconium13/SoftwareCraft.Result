@@ -37,11 +37,12 @@ namespace SoftwareCraft.Functional
 			Func<TError, Result<UValue, UError>> mapError) =>
 			mapValue(value);
 
-		public override Result<Tuple<TValue, UValue>, TError> Join<UValue>(Func<Result<UValue, TError>> other)
+		public override Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other,
+			Func<TValue, UValue, TAggregate> aggregator)
 		{
-			return other().Match<Result<Tuple<TValue, UValue>, TError>>(
-				uValue => new Success<Tuple<TValue, UValue>, TError>(Tuple.Create(value, uValue)),
-				error => new Error<Tuple<TValue, UValue>, TError>(error));
+			return other().Match<Result<TAggregate, TError>>(
+				uValue => new Success<TAggregate, TError>(aggregator(value, uValue)),
+				error => new Error<TAggregate, TError>(error));
 		}
 	}
 }
