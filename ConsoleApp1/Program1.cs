@@ -10,7 +10,7 @@ namespace ConsoleApp1
 		{
 			var person = Person.Create("Eduard", "Popescu", new DateTime(1982, 3, 5));
 
-			person.Match(Console.WriteLine, Console.WriteLine);
+			person.MatchAction(Console.WriteLine, Console.WriteLine);
 		}
 	}
 
@@ -63,12 +63,27 @@ namespace ConsoleApp1
 
 		public static Result<Person, string> Create(string firstName, string lastName, DateTime birthdate)
 		{
-			return String50.Create(firstName)
-				.Join(() => String50.Create(lastName), (f, l) => (firstName: f, lastName: l))
-				.Join(() => Birthdate.Create(birthdate),
-					(agg, b) => (firstName: agg.firstName, lastName: agg.lastName, birthdate: b))
-				.Match(agg => Result.Success<Person, string>(new Person(agg.firstName, agg.lastName, agg.birthdate)),
+			//Result.Join(() => String50.Create(firstName))
+			//	.OnSuccess((t1) => Console.WriteLine(t1))
+			//	.OnError(Console.WriteLine);
+
+			//Result.Join(() => String50.Create(firstName), () => String50.Create(lastName))
+			//	.OnSuccess<String50, String50>((t1, t2) => Console.WriteLine(t2))
+			//	.OnError(Console.WriteLine);
+
+			return Result.Join(() => String50.Create(firstName), () => String50.Create(lastName), () => Birthdate.Create(birthdate))
+				.MatchFunc((Func<String50, String50, Birthdate, Result<Person, string>>)
+					((f, l, b) => Result.Success<Person, string>(new Person(f, l, b))),
 					Result.Error<Person, string>);
+
+			//return String50.Create(firstName)
+			//	.Join(() => String50.Create(lastName), (f, l) => (firstName: f, lastName: l))
+			//	.Join(() => Birthdate.Create(birthdate),
+			//		(agg, b) => (firstName: agg.firstName, lastName: agg.lastName, birthdate: b))
+			//	.Match(agg => Result.Success<Person, string>(new Person(agg.firstName, agg.lastName, agg.birthdate)),
+			//		Result.Error<Person, string>);
 		}
+
+		public static Result<Person, string> Shit(String50 f, String50 l, Birthdate b) => Result.Success<Person, string>(new Person(f, l, b));
 	}
 }

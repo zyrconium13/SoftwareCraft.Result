@@ -14,6 +14,10 @@ namespace SoftwareCraft.Functional
 			this.error = error;
 		}
 
+		public override Result<Tuple<TValue1, TValue2>, TError> OnSuccess<TValue1, TValue2>(Action<TValue1, TValue2> onSuccess) => new Error<Tuple<TValue1, TValue2>, TError>(error);
+
+		public override Result<Tuple<TValue1, TValue2, TValue3>, TError> OnSuccess<TValue1, TValue2, TValue3>(Action<TValue1, TValue2, TValue3> onSuccess) => new Error<Tuple<TValue1, TValue2, TValue3>, TError>(error);
+
 		public override Result<TValue, TError> OnError(Action<TError> onError)
 		{
 			onError(error);
@@ -21,11 +25,25 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
-		public override void Match(Action<TValue> matchValue, Action<TError> matchError) =>
+		public override void MatchAction(Action<TValue> matchValue, Action<TError> matchError) =>
 			matchError(error);
 
-		public override TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError) =>
+		public override void MatchAction<TValue1, TValue2>(Action<TValue1, TValue2> matchValue, Action<TError> matchError)
+		{
 			matchError(error);
+		}
+
+		public override void MatchAction<TValue1, TValue2, TValue3>(Action<TValue1, TValue2, TValue3> matchValue, Action<TError> matchError)
+		{
+			matchError(error);
+		}
+
+		public override TOut MatchFunc<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError) =>
+			matchError(error);
+
+		public override TOut MatchFunc<TValue1, TValue2, TOut>(Func<TValue1, TValue2, TOut> matchValue, Func<TError, TOut> matchError) => matchError(error);
+
+		public override TOut MatchFunc<TValue1, TValue2, TValue3, TOut>(Func<TValue1, TValue2, TValue3, TOut> matchValue, Func<TError, TOut> matchError) => matchError(error);
 
 		public override Result<UValue, UError> Select<UValue, UError>(
 			Func<TValue, UValue> mapValue,
