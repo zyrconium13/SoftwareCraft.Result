@@ -37,9 +37,15 @@ namespace SoftwareCraft.Functional
 			Func<TValue, UValue> mapValue,
 			Func<TError, UError> mapError);
 
+        public abstract Result<UValue, TError> Select<UValue>(
+            Func<TValue, UValue> mapValue);
+
 		public abstract Result<UValue, UError> SelectMany<UValue, UError>(
 			Func<TValue, Result<UValue, UError>> mapValue,
 			Func<TError, Result<UValue, UError>> mapError);
+
+        public abstract Result<UValue, TError> SelectMany<UValue>(
+            Func<TValue, Result<UValue, TError>> mapValue);
 
 		public abstract Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other, Func<TValue, UValue, TAggregate> aggregator);
 
