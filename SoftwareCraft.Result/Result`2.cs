@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SoftwareCraft.Functional
 {
+	using System.Collections.Generic;
+
 	public abstract class Result<TValue, TError>
 	{
 		public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
@@ -40,12 +41,26 @@ namespace SoftwareCraft.Functional
 		public abstract Result<UValue, TError> Select<UValue>(
 			Func<TValue, UValue> mapValue);
 
+		public abstract Result<UError> Select<UError>(
+			Action<TValue> mapValue,
+			Func<TError, UError> mapError);
+
+		public abstract Result<TError> Select(
+			Action<TValue> mapValue);
+
 		public abstract Result<UValue, UError> SelectMany<UValue, UError>(
 			Func<TValue, Result<UValue, UError>> mapValue,
 			Func<TError, Result<UValue, UError>> mapError);
 
 		public abstract Result<UValue, TError> SelectMany<UValue>(
 			Func<TValue, Result<UValue, TError>> mapValue);
+
+		public abstract Result<UError> SelectMany<UError>(
+			Func<TValue, Result<UError>> mapValue,
+			Func<TError, Result<UError>> mapError);
+
+		public abstract Result<TError> SelectMany(
+			Func<TValue, Result<TError>> mapValue);
 
 		public abstract Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other, Func<TValue, UValue, TAggregate> aggregator);
 
