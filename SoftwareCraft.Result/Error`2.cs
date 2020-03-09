@@ -50,18 +50,18 @@ namespace SoftwareCraft.Functional
 			Func<TError, UError> mapError) =>
 			Result.Error<UValue, UError>(mapError(error));
 
-        public override Result<UValue, TError> Select<UValue>(
-            Func<TValue, UValue> mapValue) =>
-            Result.Error<UValue, TError>(error);
+		public override Result<UValue, TError> Select<UValue>(
+			Func<TValue, UValue> mapValue) =>
+			Result.Error<UValue, TError>(error);
 
 		public override Result<UValue, UError> SelectMany<UValue, UError>(
 			Func<TValue, Result<UValue, UError>> mapValue,
 			Func<TError, Result<UValue, UError>> mapError) =>
 			mapError(error);
 
-        public override Result<UValue, TError> SelectMany<UValue>(
-            Func<TValue, Result<UValue, TError>> mapValue) =>
-            Result.Error<UValue, TError>(error);
+		public override Result<UValue, TError> SelectMany<UValue>(
+			Func<TValue, Result<UValue, TError>> mapValue) =>
+			Result.Error<UValue, TError>(error);
 
 		public override Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other, Func<TValue, UValue, TAggregate> aggregator) =>
 			new Error<TAggregate, TError>(error);

@@ -4,9 +4,9 @@ using SoftwareCraft.Functional;
 
 namespace ConsoleApp1
 {
-	internal class Program1
+	internal static class Program1
 	{
-		private static void Main(string[] args)
+		private static void Main()
 		{
 			var person = Person.Create("Eduard", "Popescu", new DateTime(1982, 3, 5));
 

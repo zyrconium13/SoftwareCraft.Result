@@ -5,7 +5,7 @@ using SoftwareCraft.Functional;
 
 namespace ConsoleApp1
 {
-	internal class Program
+	internal static class Program
 	{
 		private static void ValidateValue1(object value)
 		{
@@ -17,7 +17,7 @@ namespace ConsoleApp1
 				throw new InvalidOperationException();
 		}
 
-		private static void Main(string[] args)
+		private static void Main()
 		{
 			Result.Success<int, string>(0);
 
