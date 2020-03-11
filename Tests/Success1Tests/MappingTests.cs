@@ -1,4 +1,4 @@
-﻿namespace Tests.Error1Tests
+﻿namespace Tests.Success1Tests
 {
 	using System;
 	using System.Linq;
@@ -8,28 +8,20 @@
 	using SoftwareCraft.Functional;
 
 	[TestClass]
-	public sealed class MappingTests : IDisposable
+	public sealed class MappingTests
 	{
-		private readonly string errorValue;
-
 		private readonly Result<string> result;
 
 		private readonly Spy spy;
 
 		public MappingTests()
 		{
-			errorValue = "error";
-			result = Result.Error(errorValue);
+			result = Result.Success<string>();
 			spy = new Spy();
 		}
 
-		public void Dispose()
-		{
-			spy?.VerifyTrip(1, errorValue);
-		}
-
 		[TestMethod]
-		public void MapsAndWrapsErrorValue()
+		public void DoesNotMapErrorValue()
 		{
 			var newResult = result.Select(e =>
 			{
@@ -37,23 +29,23 @@
 				return new Dummy();
 			});
 
+			spy.VerifyTrip(0);
 			Assert.IsInstanceOfType(newResult, typeof(Result<Dummy>));
-			Assert.IsInstanceOfType(newResult, typeof(Error<Dummy>));
+			Assert.IsInstanceOfType(newResult, typeof(Success<Dummy>));
 		}
 
 		[TestMethod]
-		public void MapsAndFlattensErrorValue()
+		public void DoesNotMapErrorValue2()
 		{
 			var newResult = result.SelectMany(e =>
 			{
 				spy.Trip(e);
-				return Result.Error(new Dummy());
+				return Result.Success<Dummy>();
 			});
 
+			spy.VerifyTrip(0);
 			Assert.IsInstanceOfType(newResult, typeof(Result<Dummy>));
-			Assert.IsInstanceOfType(newResult, typeof(Error<Dummy>));
+			Assert.IsInstanceOfType(newResult, typeof(Success<Dummy>));
 		}
 	}
-
-	public class Dummy { }
 }
