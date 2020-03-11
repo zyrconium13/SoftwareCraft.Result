@@ -1,12 +1,14 @@
-using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SoftwareCraft.Functional;
-
-namespace Tests
+namespace Tests.Success2Tests
 {
+	using System;
+	using System.Linq;
+
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+	using SoftwareCraft.Functional;
+
 	[TestClass]
-	public class Success2Tests
+	public class ValidationTests
 	{
 		[TestMethod]
 		public void CannotAssignDefaultValueToReferenceTypes()

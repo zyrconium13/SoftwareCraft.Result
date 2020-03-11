@@ -37,34 +37,34 @@ namespace SoftwareCraft.Functional
 			return new Success<Tuple<TValue1, TValue2, TValue3>, TError>(value as Tuple<TValue1, TValue2, TValue3>);
 		}
 
-		public override void MatchAction(
+		public override void Match(
 			Action<TValue> matchValue,
 			Action<TError> matchError)
 			=> matchValue(value);
 
-		public override void MatchAction<TValue1, TValue2>(
+		public override void Match<TValue1, TValue2>(
 			Action<TValue1, TValue2> matchValue,
 			Action<TError> matchError)
 		{
 			matchValue((value as Tuple<TValue1, TValue2>).Item1, (value as Tuple<TValue1, TValue2>).Item2);
 		}
 
-		public override void MatchAction<TValue1, TValue2, TValue3>(
+		public override void Match<TValue1, TValue2, TValue3>(
 			Action<TValue1, TValue2, TValue3> matchValue,
 			Action<TError> matchError)
 		{
 			matchValue((value as Tuple<TValue1, TValue2, TValue3>).Item1, (value as Tuple<TValue1, TValue2, TValue3>).Item2, (value as Tuple<TValue1, TValue2, TValue3>).Item3);
 		}
 
-		public override TOut MatchFunc<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError)
+		public override TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError)
 			=> matchValue(value);
 
-		public override TOut MatchFunc<TValue1, TValue2, TOut>(
+		public override TOut Match<TValue1, TValue2, TOut>(
 			Func<TValue1, TValue2, TOut> matchValue,
 			Func<TError, TOut> matchError)
 			=> matchValue((value as Tuple<TValue1, TValue2>).Item1, (value as Tuple<TValue1, TValue2>).Item2);
 
-		public override TOut MatchFunc<TValue1, TValue2, TValue3, TOut>(
+		public override TOut Match<TValue1, TValue2, TValue3, TOut>(
 			Func<TValue1, TValue2, TValue3, TOut> matchValue,
 			Func<TError, TOut> matchError)
 			=> matchValue((value as Tuple<TValue1, TValue2, TValue3>).Item1, (value as Tuple<TValue1, TValue2, TValue3>).Item2, (value as Tuple<TValue1, TValue2, TValue3>).Item3);
@@ -114,7 +114,7 @@ namespace SoftwareCraft.Functional
 		public override Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other,
 			Func<TValue, UValue, TAggregate> aggregator)
 		{
-			return other().MatchFunc<Result<TAggregate, TError>>(
+			return other().Match<Result<TAggregate, TError>>(
 				uValue => new Success<TAggregate, TError>(aggregator(value, uValue)),
 				error => new Error<TAggregate, TError>(error));
 		}

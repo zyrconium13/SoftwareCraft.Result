@@ -10,7 +10,7 @@ namespace ConsoleApp1
 		{
 			var person = Person.Create("Eduard", "Popescu", new DateTime(1982, 3, 5));
 
-			person.MatchAction(Console.WriteLine, Console.WriteLine);
+			person.Match(Console.WriteLine, Console.WriteLine);
 		}
 	}
 
@@ -72,7 +72,7 @@ namespace ConsoleApp1
 			//	.OnError(Console.WriteLine);
 
 			return Result.Join(() => String50.Create(firstName), () => String50.Create(lastName), () => Birthdate.Create(birthdate))
-				.MatchFunc((Func<String50, String50, Birthdate, Result<Person, string>>)
+				.Match((Func<String50, String50, Birthdate, Result<Person, string>>)
 					((f, l, b) => Result.Success<Person, string>(new Person(f, l, b))),
 					Result.Error<Person, string>);
 

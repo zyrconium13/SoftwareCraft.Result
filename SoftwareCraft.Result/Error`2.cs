@@ -29,36 +29,36 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
-		public override void MatchAction(
+		public override void Match(
 			Action<TValue> matchValue,
 			Action<TError> matchError)
 			=> matchError(error);
 
-		public override void MatchAction<TValue1, TValue2>(
+		public override void Match<TValue1, TValue2>(
 			Action<TValue1, TValue2> matchValue,
 			Action<TError> matchError)
 		{
 			matchError(error);
 		}
 
-		public override void MatchAction<TValue1, TValue2, TValue3>(
+		public override void Match<TValue1, TValue2, TValue3>(
 			Action<TValue1, TValue2, TValue3> matchValue,
 			Action<TError> matchError)
 		{
 			matchError(error);
 		}
 
-		public override TOut MatchFunc<TOut>(
+		public override TOut Match<TOut>(
 			Func<TValue, TOut> matchValue,
 			Func<TError, TOut> matchError)
 			=> matchError(error);
 
-		public override TOut MatchFunc<TValue1, TValue2, TOut>(
+		public override TOut Match<TValue1, TValue2, TOut>(
 			Func<TValue1, TValue2, TOut> matchValue,
 			Func<TError, TOut> matchError)
 			=> matchError(error);
 
-		public override TOut MatchFunc<TValue1, TValue2, TValue3, TOut>(
+		public override TOut Match<TValue1, TValue2, TValue3, TOut>(
 			Func<TValue1, TValue2, TValue3, TOut> matchValue,
 			Func<TError, TOut> matchError)
 			=> matchError(error);
