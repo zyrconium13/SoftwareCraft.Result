@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-
-namespace SoftwareCraft.Functional
+﻿namespace SoftwareCraft.Functional
 {
+	using System;
+	using System.Linq;
+
 	public class Error<TError> : Result<TError>
 	{
 		private readonly TError error;
 
-		public Error(TError error)
+		internal Error(TError error)
 		{
 			Validate(error);
 

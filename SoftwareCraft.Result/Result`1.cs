@@ -10,7 +10,7 @@ namespace SoftwareCraft.Functional
 
 		public virtual Result<TError> OnError(Action<TError> onError) => this;
 
-		public virtual Result<TError> OnBoth(Action onBoth)
+		public Result<TError> OnBoth(Action onBoth)
 		{
 			onBoth();
 
