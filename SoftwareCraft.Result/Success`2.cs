@@ -7,7 +7,7 @@ namespace SoftwareCraft.Functional
 	{
 		private readonly TValue value;
 
-		public Success(TValue value)
+		internal Success(TValue value)
 		{
 			Validate(value);
 
@@ -21,53 +21,15 @@ namespace SoftwareCraft.Functional
 			return this;
 		}
 
-		public override Result<Tuple<TValue1, TValue2>, TError> OnSuccess<TValue1, TValue2>(
-			Action<TValue1, TValue2> onSuccess)
-		{
-			onSuccess((value as Tuple<TValue1, TValue2>).Item1, (value as Tuple<TValue1, TValue2>).Item2);
-
-			return new Success<Tuple<TValue1, TValue2>, TError>(value as Tuple<TValue1, TValue2>);
-		}
-
-		public override Result<Tuple<TValue1, TValue2, TValue3>, TError> OnSuccess<TValue1, TValue2, TValue3>(
-			Action<TValue1, TValue2, TValue3> onSuccess)
-		{
-			onSuccess((value as Tuple<TValue1, TValue2, TValue3>).Item1, (value as Tuple<TValue1, TValue2, TValue3>).Item2, (value as Tuple<TValue1, TValue2, TValue3>).Item3);
-
-			return new Success<Tuple<TValue1, TValue2, TValue3>, TError>(value as Tuple<TValue1, TValue2, TValue3>);
-		}
-
 		public override void Match(
 			Action<TValue> matchValue,
 			Action<TError> matchError)
 			=> matchValue(value);
 
-		public override void Match<TValue1, TValue2>(
-			Action<TValue1, TValue2> matchValue,
-			Action<TError> matchError)
-		{
-			matchValue((value as Tuple<TValue1, TValue2>).Item1, (value as Tuple<TValue1, TValue2>).Item2);
-		}
-
-		public override void Match<TValue1, TValue2, TValue3>(
-			Action<TValue1, TValue2, TValue3> matchValue,
-			Action<TError> matchError)
-		{
-			matchValue((value as Tuple<TValue1, TValue2, TValue3>).Item1, (value as Tuple<TValue1, TValue2, TValue3>).Item2, (value as Tuple<TValue1, TValue2, TValue3>).Item3);
-		}
-
-		public override TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError)
+		public override TOut Match<TOut>(
+			Func<TValue, TOut> matchValue,
+			Func<TError, TOut> matchError)
 			=> matchValue(value);
-
-		public override TOut Match<TValue1, TValue2, TOut>(
-			Func<TValue1, TValue2, TOut> matchValue,
-			Func<TError, TOut> matchError)
-			=> matchValue((value as Tuple<TValue1, TValue2>).Item1, (value as Tuple<TValue1, TValue2>).Item2);
-
-		public override TOut Match<TValue1, TValue2, TValue3, TOut>(
-			Func<TValue1, TValue2, TValue3, TOut> matchValue,
-			Func<TError, TOut> matchError)
-			=> matchValue((value as Tuple<TValue1, TValue2, TValue3>).Item1, (value as Tuple<TValue1, TValue2, TValue3>).Item2, (value as Tuple<TValue1, TValue2, TValue3>).Item3);
 
 		public override Result<UValue, UError> Select<UValue, UError>(
 			Func<TValue, UValue> mapValue,
@@ -79,19 +41,8 @@ namespace SoftwareCraft.Functional
 			=> Result.Success<UValue, TError>(mapValue(value));
 
 		public override Result<UError> Select<UError>(
-			Action<TValue> mapValue,
 			Func<TError, UError> mapError)
-		{
-			mapValue(value);
-			return Result.Success<UError>();
-		}
-
-		public override Result<TError> Select(Action<TValue> mapValue)
-		{
-			mapValue(value);
-
-			return Result.Success<TError>();
-		}
+			=> Result.Success<UError>();
 
 		public override Result<UValue, UError> SelectMany<UValue, UError>(
 			Func<TValue, Result<UValue, UError>> mapValue,

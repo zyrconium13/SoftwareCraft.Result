@@ -1,10 +1,14 @@
-using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SoftwareCraft.Functional;
-
 namespace Tests
 {
+	using System;
+	using System.Linq;
+
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+	using SampleTypes.Reference;
+
+	using SoftwareCraft.Functional;
+
 	[TestClass]
 	public class Error2Tests
 	{
@@ -12,7 +16,7 @@ namespace Tests
 		public void CannotAssignDefaultValueToReferenceTypes()
 		{
 			Assert.ThrowsException<InvalidOperationException>
-				(() => Result.Error<int, SampleReferenceType>(default));
+				(() => Result.Error<int, RedDragon>(default));
 		}
 
 		[TestMethod]

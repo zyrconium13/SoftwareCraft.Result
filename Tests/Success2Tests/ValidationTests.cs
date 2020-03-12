@@ -5,6 +5,9 @@ namespace Tests.Success2Tests
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+	using SampleTypes.Reference;
+	using SampleTypes.Value;
+
 	using SoftwareCraft.Functional;
 
 	[TestClass]
@@ -14,19 +17,19 @@ namespace Tests.Success2Tests
 		public void CannotAssignDefaultValueToReferenceTypes()
 		{
 			Assert.ThrowsException<InvalidOperationException>
-				(() => Result.Success<SampleReferenceType, string>(default));
+				(() => Result.Success<RedDragon, VioletIris>(default));
 		}
 
 		[TestMethod]
 		public void CannotAssignDefaultValueToNullableValueTypes()
 		{
-			Assert.ThrowsException<InvalidOperationException>(() => Result.Success<int?, string>(default));
+			Assert.ThrowsException<InvalidOperationException>(() => Result.Success<int?, VioletIris>(default));
 		}
 
 		[TestMethod]
 		public void CanAssignDefaultValueToValueTypes()
 		{
-			Assert.IsNotNull(Result.Success<int, string>(default));
+			Assert.IsNotNull(Result.Success<int, VioletIris>(default));
 		}
 	}
 }

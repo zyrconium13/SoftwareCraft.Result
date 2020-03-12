@@ -5,6 +5,8 @@ namespace Tests.Error1Tests
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+	using SampleTypes.Reference;
+
 	using SoftwareCraft.Functional;
 
 	[TestClass]
@@ -14,7 +16,7 @@ namespace Tests.Error1Tests
 		public void CannotAssignDefaultValueToReferenceTypes()
 		{
 			Assert.ThrowsException<InvalidOperationException>
-				(() => Result.Error<SampleReferenceType>(default));
+				(() => Result.Error<RedDragon>(default));
 		}
 
 		[TestMethod]

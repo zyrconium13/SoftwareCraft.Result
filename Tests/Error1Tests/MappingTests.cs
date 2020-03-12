@@ -5,20 +5,23 @@
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+	using SampleTypes.Reference;
+	using SampleTypes.Value;
+
 	using SoftwareCraft.Functional;
 
 	[TestClass]
 	public sealed class MappingTests : IDisposable
 	{
-		private readonly string errorValue;
+		private readonly PinkLily errorValue;
 
-		private readonly Result<string> result;
+		private readonly Result<PinkLily> result;
 
 		private readonly Spy spy;
 
 		public MappingTests()
 		{
-			errorValue = "error";
+			errorValue = new PinkLily();
 			result = Result.Error(errorValue);
 			spy = new Spy();
 		}
@@ -34,11 +37,11 @@
 			var newResult = result.Select(e =>
 			{
 				spy.Trip(e);
-				return new Dummy();
+				return new VioletIris();
 			});
 
-			Assert.IsInstanceOfType(newResult, typeof(Result<Dummy>));
-			Assert.IsInstanceOfType(newResult, typeof(Error<Dummy>));
+			Assert.IsInstanceOfType(newResult, typeof(Result<VioletIris>));
+			Assert.IsInstanceOfType(newResult, typeof(Error<VioletIris>));
 		}
 
 		[TestMethod]
@@ -47,13 +50,11 @@
 			var newResult = result.SelectMany(e =>
 			{
 				spy.Trip(e);
-				return Result.Error(new Dummy());
+				return Result.Error(new VioletIris());
 			});
 
-			Assert.IsInstanceOfType(newResult, typeof(Result<Dummy>));
-			Assert.IsInstanceOfType(newResult, typeof(Error<Dummy>));
+			Assert.IsInstanceOfType(newResult, typeof(Result<VioletIris>));
+			Assert.IsInstanceOfType(newResult, typeof(Error<VioletIris>));
 		}
 	}
-
-	public class Dummy { }
 }

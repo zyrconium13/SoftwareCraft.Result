@@ -5,18 +5,21 @@
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+	using SampleTypes.Reference;
+	using SampleTypes.Value;
+
 	using SoftwareCraft.Functional;
 
 	[TestClass]
 	public sealed class MappingTests
 	{
-		private readonly Result<string> result;
+		private readonly Result<VioletIris> result;
 
 		private readonly Spy spy;
 
 		public MappingTests()
 		{
-			result = Result.Success<string>();
+			result = Result.Success<VioletIris>();
 			spy = new Spy();
 		}
 
@@ -26,12 +29,12 @@
 			var newResult = result.Select(e =>
 			{
 				spy.Trip(e);
-				return new Dummy();
+				return new PinkLily();
 			});
 
 			spy.VerifyTrip(0);
-			Assert.IsInstanceOfType(newResult, typeof(Result<Dummy>));
-			Assert.IsInstanceOfType(newResult, typeof(Success<Dummy>));
+			Assert.IsInstanceOfType(newResult, typeof(Result<PinkLily>));
+			Assert.IsInstanceOfType(newResult, typeof(Success<PinkLily>));
 		}
 
 		[TestMethod]
@@ -40,12 +43,12 @@
 			var newResult = result.SelectMany(e =>
 			{
 				spy.Trip(e);
-				return Result.Success<Dummy>();
+				return Result.Success<PinkLily>();
 			});
 
 			spy.VerifyTrip(0);
-			Assert.IsInstanceOfType(newResult, typeof(Result<Dummy>));
-			Assert.IsInstanceOfType(newResult, typeof(Success<Dummy>));
+			Assert.IsInstanceOfType(newResult, typeof(Result<PinkLily>));
+			Assert.IsInstanceOfType(newResult, typeof(Success<PinkLily>));
 		}
 	}
 }

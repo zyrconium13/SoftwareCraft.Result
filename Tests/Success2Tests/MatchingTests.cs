@@ -1,4 +1,4 @@
-﻿namespace Tests.Success1Tests
+﻿namespace Tests.Success2Tests
 {
 	using System;
 	using System.Linq;
@@ -6,6 +6,7 @@
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 	using SampleTypes.Reference;
+	using SampleTypes.Value;
 
 	using SoftwareCraft.Functional;
 
@@ -15,31 +16,33 @@
 		[TestMethod]
 		public void ActionMatchingOverloadInvokesTheSuccessBranch()
 		{
-			var result = Result.Success<string>();
+			var value = new RedDragon();
+
+			var result = Result.Success<RedDragon, string>(value);
 
 			var spy = new Spy();
 
 			result.Match(
-				() => { spy.Trip(); },
+				v => { spy.Trip(v); },
 				e => { spy.Trip(e); }
 			);
 
-			spy.VerifyTrip(1);
+			spy.VerifyTrip(1, value);
 		}
 
 		[TestMethod]
 		public void FunctionMatchingOverloadInvokesTheSuccessBranch()
 		{
-			var successDummy = new RedDragon();
-			var errorDummy = new RedDragon();
+			var successDummy = new VioletIris();
+			var errorDummy = new VioletIris();
 
-			var result = Result.Success<string>();
+			var result = Result.Success<RedDragon, string>(new RedDragon());
 
 			var matchResult = result.Match(
-				() => successDummy,
+				v => successDummy,
 				e => errorDummy);
 
-			Assert.AreSame(successDummy, matchResult);
+			Assert.AreEqual(successDummy, matchResult);
 			Assert.AreNotSame(errorDummy, matchResult);
 		}
 	}

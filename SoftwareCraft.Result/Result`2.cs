@@ -9,10 +9,6 @@ namespace SoftwareCraft.Functional
 	{
 		public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
 
-		public abstract Result<Tuple<TValue1, TValue2>, TError> OnSuccess<TValue1, TValue2>(Action<TValue1, TValue2> onSuccess);
-
-		public abstract Result<Tuple<TValue1, TValue2, TValue3>, TError> OnSuccess<TValue1, TValue2, TValue3>(Action<TValue1, TValue2, TValue3> onSuccess);
-
 		public virtual Result<TValue, TError> OnError(Action<TError> onError) => this;
 
 		public virtual Result<TValue, TError> OnBoth(Action onBoth)
@@ -24,15 +20,7 @@ namespace SoftwareCraft.Functional
 
 		public abstract void Match(Action<TValue> matchValue, Action<TError> matchError);
 
-		public abstract void Match<TValue1, TValue2>(Action<TValue1, TValue2> matchValue, Action<TError> matchError);
-
-		public abstract void Match<TValue1, TValue2, TValue3>(Action<TValue1, TValue2, TValue3> matchValue, Action<TError> matchError);
-
 		public abstract TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError);
-
-		public abstract TOut Match<TValue1, TValue2, TOut>(Func<TValue1, TValue2, TOut> matchValue, Func<TError, TOut> matchError);
-
-		public abstract TOut Match<TValue1, TValue2, TValue3, TOut>(Func<TValue1, TValue2, TValue3, TOut> matchValue, Func<TError, TOut> matchError);
 
 		public abstract Result<UValue, UError> Select<UValue, UError>(
 			Func<TValue, UValue> mapValue,
@@ -42,11 +30,7 @@ namespace SoftwareCraft.Functional
 			Func<TValue, UValue> mapValue);
 
 		public abstract Result<UError> Select<UError>(
-			Action<TValue> mapValue,
 			Func<TError, UError> mapError);
-
-		public abstract Result<TError> Select(
-			Action<TValue> mapValue);
 
 		public abstract Result<UValue, UError> SelectMany<UValue, UError>(
 			Func<TValue, Result<UValue, UError>> mapValue,

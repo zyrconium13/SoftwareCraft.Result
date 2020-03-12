@@ -5,20 +5,20 @@
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+	using SampleTypes.Value;
+
 	using SoftwareCraft.Functional;
 
 	[TestClass]
 	public class OnMethodsTests
 	{
-		private readonly string errorValue;
-
-		private readonly Result<string> result;
+		private readonly Result<PinkLily> result;
 
 		private readonly Spy spy;
 
 		public OnMethodsTests()
 		{
-			result = Result.Success<string>();
+			result = Result.Success<PinkLily>();
 
 			spy = new Spy();
 		}
