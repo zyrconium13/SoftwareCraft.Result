@@ -31,6 +31,16 @@ namespace SoftwareCraft.Functional
 			Func<TError, TOut> matchError)
 			=> matchValue(value);
 
+		public override Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other,
+			Func<TValue, UValue, TAggregate> aggregator)
+		{
+			return other().Match<Result<TAggregate, TError>>(
+				uValue => new Success<TAggregate, TError>(aggregator(value, uValue)),
+				error => new Error<TAggregate, TError>(error));
+		}
+
+		#region Select
+
 		public override Result<UValue, UError> Select<UValue, UError>(
 			Func<TValue, UValue> mapValue,
 			Func<TError, UError> mapError)
@@ -40,13 +50,24 @@ namespace SoftwareCraft.Functional
 			Func<TValue, UValue> mapValue)
 			=> Result.Success<UValue, TError>(mapValue(value));
 
-		public override Result<UError> Select<UError>(
+		public override Result<UError> SelectSwitch<UError>(
 			Func<TError, UError> mapError)
 			=> Result.Success<UError>();
+
+		public override Result<TError> SelectSwitch()
+			=> Result.Success<TError>();
+
+		#endregion
+
+		#region SelectMany
 
 		public override Result<UValue, UError> SelectMany<UValue, UError>(
 			Func<TValue, Result<UValue, UError>> mapValue,
 			Func<TError, Result<UValue, UError>> mapError)
+			=> mapValue(value);
+
+		public override Result<UValue, TError> SelectMany<UValue>(
+			Func<TValue, Result<UValue, TError>> mapValue)
 			=> mapValue(value);
 
 		public override Result<UError> SelectMany<UError>(
@@ -58,16 +79,6 @@ namespace SoftwareCraft.Functional
 			Func<TValue, Result<TError>> mapValue)
 			=> mapValue(value);
 
-		public override Result<UValue, TError> SelectMany<UValue>(
-			Func<TValue, Result<UValue, TError>> mapValue)
-			=> mapValue(value);
-
-		public override Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other,
-			Func<TValue, UValue, TAggregate> aggregator)
-		{
-			return other().Match<Result<TAggregate, TError>>(
-				uValue => new Success<TAggregate, TError>(aggregator(value, uValue)),
-				error => new Error<TAggregate, TError>(error));
-		}
+		#endregion
 	}
 }

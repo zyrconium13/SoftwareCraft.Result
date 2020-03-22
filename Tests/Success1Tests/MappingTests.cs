@@ -33,7 +33,6 @@
 			});
 
 			spy.VerifyTrip(0);
-			Assert.IsInstanceOfType(newResult, typeof(Result<PinkLily>));
 			Assert.IsInstanceOfType(newResult, typeof(Success<PinkLily>));
 		}
 
@@ -47,7 +46,6 @@
 			});
 
 			spy.VerifyTrip(0);
-			Assert.IsInstanceOfType(newResult, typeof(Result<PinkLily>));
 			Assert.IsInstanceOfType(newResult, typeof(Success<PinkLily>));
 		}
 	}

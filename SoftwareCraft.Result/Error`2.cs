@@ -31,6 +31,13 @@ namespace SoftwareCraft.Functional
 			Func<TError, TOut> matchError)
 			=> matchError(error);
 
+		public override Result<TAggregate, TError> Join<UValue, TAggregate>(
+			Func<Result<UValue, TError>> other,
+			Func<TValue, UValue, TAggregate> aggregator)
+			=> new Error<TAggregate, TError>(error);
+
+		#region Select
+
 		public override Result<UValue, UError> Select<UValue, UError>(
 			Func<TValue, UValue> mapValue,
 			Func<TError, UError> mapError)
@@ -40,9 +47,16 @@ namespace SoftwareCraft.Functional
 			Func<TValue, UValue> mapValue)
 			=> Result.Error<UValue, TError>(error);
 
-		public override Result<UError> Select<UError>(
+		public override Result<UError> SelectSwitch<UError>(
 			Func<TError, UError> mapError)
 			=> Result.Error(mapError(error));
+
+		public override Result<TError> SelectSwitch()
+			=> Result.Error(error);
+
+		#endregion
+
+		#region SelectMany
 
 		public override Result<UValue, UError> SelectMany<UValue, UError>(
 			Func<TValue, Result<UValue, UError>> mapValue,
@@ -62,9 +76,6 @@ namespace SoftwareCraft.Functional
 			Func<TValue, Result<UValue, TError>> mapValue)
 			=> Result.Error<UValue, TError>(error);
 
-		public override Result<TAggregate, TError> Join<UValue, TAggregate>(
-			Func<Result<UValue, TError>> other,
-			Func<TValue, UValue, TAggregate> aggregator)
-			=> new Error<TAggregate, TError>(error);
+		#endregion
 	}
 }
