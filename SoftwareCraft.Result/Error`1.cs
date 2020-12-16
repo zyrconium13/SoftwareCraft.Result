@@ -30,10 +30,10 @@ namespace SoftwareCraft.Functional
 
 		public override Result<UError> SelectMany<UError>(Func<TError, Result<UError>> mapError) => mapError(error);
 
-		public override Result<TError> Join(Func<Result<TError>> other) => Result.Error(error);
+		//public override Result<TError> Join(Func<Result<TError>> other) => Result.Error(error);
 
-		public override Result<IEnumerable<TError>> Join(Result<TError> other) =>
-			other.Match(() => Result.Error<IEnumerable<TError>>(new[] {error}),
-				e => Result.Error<IEnumerable<TError>>(new[] {error, e}));
+		//public override Result<IEnumerable<TError>> Join(Result<TError> other) =>
+		//	other.Match(() => Result.Error<IEnumerable<TError>>(new[] {error}),
+		//		e => Result.Error<IEnumerable<TError>>(new[] {error, e}));
 	}
 }

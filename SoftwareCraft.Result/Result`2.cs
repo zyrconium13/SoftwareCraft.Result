@@ -1,73 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SoftwareCraft.Functional
 {
-	public abstract class Result<TValue, TError>
-	{
-		public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
+    public abstract class Result<TValue, TError>
+    {
+        public abstract bool IsSuccess { get; }
 
-		public virtual Result<TValue, TError> OnError(Action<TError> onError) => this;
+        internal abstract TValue Value { get; }
 
-		public virtual Result<TValue, TError> OnBoth(Action onBoth)
-		{
-			onBoth();
+        internal abstract TError ResultError { get; }
 
-			return this;
-		}
+        public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
 
-		public abstract void Match(Action<TValue> matchValue, Action<TError> matchError);
+        public virtual Result<TValue, TError> OnError(Action<TError> onError) => this;
 
-		public abstract TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError);
+        public virtual Result<TValue, TError> OnBoth(Action onBoth)
+        {
+            onBoth();
 
-		public abstract Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other,
-			Func<TValue, UValue, TAggregate> aggregator);
+            return this;
+        }
 
-		public abstract Result<TAggregate, IEnumerable<TError>> Join<UValue, TAggregate>(Result<UValue, TError> other,
-			Func<TValue, UValue, TAggregate> aggregator);
+        public abstract void Match(Action<TValue> matchValue, Action<TError> matchError);
 
-		private protected static void Validate<T>(T value)
-		{
-			var isNotValueType = !typeof(T).IsValueType;
-			var isNullableValueType = Nullable.GetUnderlyingType(typeof(T)) != null;
-			var hasDefaultValue = EqualityComparer<T>.Default.Equals(value, default);
+        public abstract TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError);
 
-			if ((isNotValueType || isNullableValueType) && hasDefaultValue)
-				throw new InvalidOperationException();
-		}
+        private protected static void Validate<T>(T value)
+        {
+            var isNotValueType = !typeof(T).IsValueType;
+            var isNullableValueType = Nullable.GetUnderlyingType(typeof(T)) != null;
+            var hasDefaultValue = EqualityComparer<T>.Default.Equals(value, default);
 
-		#region Select
+            if ((isNotValueType || isNullableValueType) && hasDefaultValue)
+                throw new InvalidOperationException();
+        }
 
-		public abstract Result<UValue, UError> Select<UValue, UError>(
-			Func<TValue, UValue> mapValue,
-			Func<TError, UError> mapError);
+        #region Select
 
-		public abstract Result<UValue, TError> Select<UValue>(
-			Func<TValue, UValue> mapValue);
+        public abstract Result<UValue, UError> Select<UValue, UError>(
+            Func<TValue, UValue> mapValue,
+            Func<TError, UError> mapError);
 
-		public abstract Result<UError> SelectSwitch<UError>(
-			Func<TError, UError> mapError);
+        public abstract Task<Result<UValue, UError>> SelectAsync<UValue, UError>(
+            Func<TValue, Task<UValue>> mapValue,
+            Func<TError, Task<UError>> mapError);
 
-		public abstract Result<TError> SelectSwitch();
+        public abstract Result<UValue, TError> Select<UValue>(
+            Func<TValue, UValue> mapValue);
 
-		#endregion
+        public abstract Task<Result<UValue, TError>> SelectAsync<UValue>(
+            Func<TValue, Task<UValue>> mapValue);
 
-		#region SelectMany
+        public abstract Result<UError> SelectSwitch<UError>(
+            Func<TError, UError> mapError);
 
-		public abstract Result<UValue, UError> SelectMany<UValue, UError>(
-			Func<TValue, Result<UValue, UError>> mapValue,
-			Func<TError, Result<UValue, UError>> mapError);
+        public abstract Result<TError> SelectSwitch();
 
-		public abstract Result<UValue, TError> SelectMany<UValue>(
-			Func<TValue, Result<UValue, TError>> mapValue);
+        #endregion
 
-		public abstract Result<UError> SelectMany<UError>(
-			Func<TValue, Result<UError>> mapValue,
-			Func<TError, Result<UError>> mapError);
+        #region SelectMany
 
-		public abstract Result<TError> SelectMany(
-			Func<TValue, Result<TError>> mapValue);
+        public abstract Result<UValue, UError> SelectMany<UValue, UError>(
+            Func<TValue, Result<UValue, UError>> mapValue,
+            Func<TError, Result<UValue, UError>> mapError);
 
-		#endregion
-	}
+        public abstract Task<Result<UValue, UError>> SelectManyAsync<UValue, UError>(
+            Func<TValue, Task<Result<UValue, UError>>> mapValue,
+            Func<TError, Task<Result<UValue, UError>>> mapError);
+
+        public abstract Result<UValue, TError> SelectMany<UValue>(
+            Func<TValue, Result<UValue, TError>> mapValue);
+
+        public abstract Task<Result<UValue, TError>> SelectManyAsync<UValue>(
+            Func<TValue, Task<Result<UValue, TError>>> mapValue);
+
+        public abstract Result<UError> SelectMany<UError>(
+            Func<TValue, Result<UError>> mapValue,
+            Func<TError, Result<UError>> mapError);
+
+        public abstract Task<Result<UError>> SelectManyAsync<UError>(
+            Func<TValue, Task<Result<UError>>> mapValue,
+            Func<TError, Task<Result<UError>>> mapError);
+
+        public abstract Result<TError> SelectMany(
+            Func<TValue, Result<TError>> mapValue);
+
+        public abstract Task<Result<TError>> SelectManyAsync(
+            Func<TValue, Task<Result<TError>>> mapValue);
+
+        #endregion
+    }
 }
