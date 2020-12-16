@@ -28,13 +28,6 @@ namespace SoftwareCraft.Functional
             return this;
         }
 
-        public override async Task<Result<TValue, TError>> OnErrorAsync(Func<TError, Task> onError)
-        {
-            await onError(error);
-
-            return this;
-        }
-
         public override void Match(
             Action<TValue> matchValue,
             Action<TError> matchError)

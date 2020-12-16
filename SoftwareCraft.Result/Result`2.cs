@@ -15,23 +15,11 @@ namespace SoftwareCraft.Functional
 
         public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
 
-        public virtual Task<Result<TValue, TError>> OnSuccessAsync(Func<TValue, Task> onSuccess) =>
-            Task.FromResult(this);
-
         public virtual Result<TValue, TError> OnError(Action<TError> onError) => this;
-
-        public virtual Task<Result<TValue, TError>> OnErrorAsync(Func<TError, Task> onError) => Task.FromResult(this);
 
         public virtual Result<TValue, TError> OnBoth(Action onBoth)
         {
             onBoth();
-
-            return this;
-        }
-
-        public virtual async Task<Result<TValue, TError>> OnBothAsync(Func<Task> onBoth)
-        {
-            await onBoth();
 
             return this;
         }
