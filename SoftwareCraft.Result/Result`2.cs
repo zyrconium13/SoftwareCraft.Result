@@ -15,7 +15,12 @@ namespace SoftwareCraft.Functional
 
         public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
 
+        public virtual Task<Result<TValue, TError>> OnSuccessAsync(Func<TValue, Task> onSuccess) =>
+            Task.FromResult(this);
+
         public virtual Result<TValue, TError> OnError(Action<TError> onError) => this;
+
+        public virtual Task<Result<TValue, TError>> OnErrorAsync(Func<TError, Task> onError) => Task.FromResult(this);
 
         public virtual Result<TValue, TError> OnBoth(Action onBoth)
         {
@@ -24,9 +29,21 @@ namespace SoftwareCraft.Functional
             return this;
         }
 
+        public virtual async Task<Result<TValue, TError>> OnBothAsync(Func<Task> onBoth)
+        {
+            await onBoth();
+
+            return this;
+        }
+
         public abstract void Match(Action<TValue> matchValue, Action<TError> matchError);
 
+        public abstract Task MatchAsync(Func<TValue, Task> matchValue, Func<TError, Task> matchError);
+
         public abstract TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError);
+
+        public abstract Task<TOut> MatchAsync<TOut>(Func<TValue, Task<TOut>> matchValue,
+            Func<TError, Task<TOut>> matchError);
 
         private protected static void Validate<T>(T value)
         {

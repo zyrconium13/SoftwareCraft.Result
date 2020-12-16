@@ -28,14 +28,31 @@ namespace SoftwareCraft.Functional
             return this;
         }
 
+        public override async Task<Result<TValue, TError>> OnErrorAsync(Func<TError, Task> onError)
+        {
+            await onError(error);
+
+            return this;
+        }
+
         public override void Match(
             Action<TValue> matchValue,
             Action<TError> matchError)
             => matchError(error);
 
+        public override Task MatchAsync(
+            Func<TValue, Task> matchValue,
+            Func<TError, Task> matchError)
+            => matchError(error);
+
         public override TOut Match<TOut>(
             Func<TValue, TOut> matchValue,
             Func<TError, TOut> matchError)
+            => matchError(error);
+
+        public override Task<TOut> MatchAsync<TOut>(
+            Func<TValue, Task<TOut>> matchValue,
+            Func<TError, Task<TOut>> matchError)
             => matchError(error);
 
         #region Select

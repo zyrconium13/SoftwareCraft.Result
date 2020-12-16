@@ -30,9 +30,21 @@ namespace SoftwareCraft.Functional
             return this;
         }
 
+        public override async Task<Result<TValue, TError>> OnSuccessAsync(Func<TValue, Task> onSuccess)
+        {
+            await onSuccess(value);
+
+            return this;
+        }
+
         public override void Match(
             Action<TValue> matchValue,
             Action<TError> matchError)
+            => matchValue(value);
+
+        public override Task MatchAsync(
+            Func<TValue, Task> matchValue,
+            Func<TError, Task> matchError)
             => matchValue(value);
 
         public override TOut Match<TOut>(
@@ -40,20 +52,10 @@ namespace SoftwareCraft.Functional
             Func<TError, TOut> matchError)
             => matchValue(value);
 
-        //public override Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other,
-        //    Func<TValue, UValue, TAggregate> aggregator)
-        //{
-        //    return other().Match(
-        //        uValue => Result.Success<TAggregate, TError>(aggregator(value, uValue)),
-        //        Result.Error<TAggregate, TError>);
-        //}
-
-        //public override Result<TAggregate, IEnumerable<TError>> Join<UValue, TAggregate>(
-        //    Result<UValue, TError> other, Func<TValue, UValue, TAggregate> aggregator)
-        //{
-        //    return other.Match(o => Result.Success<TAggregate, IEnumerable<TError>>(aggregator(value, o)),
-        //        e => Result.Error<TAggregate, IEnumerable<TError>>(new[] {e}));
-        //}
+        public override Task<TOut> MatchAsync<TOut>(
+            Func<TValue, Task<TOut>> matchValue,
+            Func<TError, Task<TOut>> matchError)
+            => matchValue(value);
 
         #region Select
 
@@ -109,7 +111,7 @@ namespace SoftwareCraft.Functional
             => mapValue(value);
 
         public override Task<Result<UError>> SelectManyAsync<UError>(
-            Func<TValue, Task<Result<UError>>> mapValue, 
+            Func<TValue, Task<Result<UError>>> mapValue,
             Func<TError, Task<Result<UError>>> mapError)
             => mapValue(value);
 
@@ -117,7 +119,7 @@ namespace SoftwareCraft.Functional
             Func<TValue, Result<TError>> mapValue)
             => mapValue(value);
 
-        public override Task<Result<TError>> SelectManyAsync(Func<TValue, Task<Result<TError>>> mapValue) 
+        public override Task<Result<TError>> SelectManyAsync(Func<TValue, Task<Result<TError>>> mapValue)
             => mapValue(value);
 
         #endregion
