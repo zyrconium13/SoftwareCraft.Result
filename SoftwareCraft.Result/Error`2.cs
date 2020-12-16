@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace SoftwareCraft.Functional
 {
@@ -34,7 +34,13 @@ namespace SoftwareCraft.Functional
 		public override Result<TAggregate, TError> Join<UValue, TAggregate>(
 			Func<Result<UValue, TError>> other,
 			Func<TValue, UValue, TAggregate> aggregator)
-			=> new Error<TAggregate, TError>(error);
+			=> Result.Error<TAggregate, TError>(error);
+
+		public override Result<TAggregate, IEnumerable<TError>> Join<UValue, TAggregate>(Result<UValue, TError> other, Func<TValue, UValue, TAggregate> aggregator)
+		{
+			return other.Match(o => Result.Error<TAggregate, IEnumerable<TError>>(new[] {error}),
+				e => Result.Error<TAggregate, IEnumerable<TError>>(new[] {error, e}));
+		}
 
 		#region Select
 

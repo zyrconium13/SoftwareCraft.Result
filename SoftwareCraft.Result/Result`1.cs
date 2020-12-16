@@ -25,6 +25,10 @@ namespace SoftwareCraft.Functional
 
 		public abstract Result<UError> SelectMany<UError>(Func<TError, Result<UError>> mapError);
 
+		public abstract Result<TError> Join(Func<Result<TError>> other);
+
+		public abstract Result<IEnumerable<TError>> Join(Result<TError> other);
+
 		private protected static void Validate<T>(T value)
 		{
 			var isNotValueType = !typeof(T).IsValueType;

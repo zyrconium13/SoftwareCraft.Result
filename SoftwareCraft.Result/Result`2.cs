@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace SoftwareCraft.Functional
 {
-	using System.Collections.Generic;
-
 	public abstract class Result<TValue, TError>
 	{
 		public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
@@ -22,7 +20,11 @@ namespace SoftwareCraft.Functional
 
 		public abstract TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError);
 
-		public abstract Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other, Func<TValue, UValue, TAggregate> aggregator);
+		public abstract Result<TAggregate, TError> Join<UValue, TAggregate>(Func<Result<UValue, TError>> other,
+			Func<TValue, UValue, TAggregate> aggregator);
+
+		public abstract Result<TAggregate, IEnumerable<TError>> Join<UValue, TAggregate>(Result<UValue, TError> other,
+			Func<TValue, UValue, TAggregate> aggregator);
 
 		private protected static void Validate<T>(T value)
 		{
