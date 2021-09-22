@@ -1,112 +1,157 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SoftwareCraft.Functional
+﻿namespace SoftwareCraft.Functional
 {
-    public abstract class Result<TValue, TError>
-    {
-        public abstract bool IsSuccess { get; }
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
 
-        internal abstract TValue Value { get; }
+	public abstract class Result<TValue, TError>
+	{
+		public abstract bool IsSuccess { get; }
 
-        internal abstract TError ResultError { get; }
+		private protected static void Validate<T>(T value)
+		{
+			var isNotValueType      = !typeof(T).IsValueType;
+			var isNullableValueType = Nullable.GetUnderlyingType(typeof(T)) != null;
+			var hasDefaultValue     = EqualityComparer<T>.Default.Equals(value, default);
 
-        public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
+			if ((isNotValueType || isNullableValueType) && hasDefaultValue)
+				throw new InvalidOperationException();
+		}
 
-        public virtual Task<Result<TValue, TError>> OnSuccessAsync(Func<TValue, Task> onSuccess) => Task.FromResult(this);
+		#region On
 
-        public virtual Result<TValue, TError> OnError(Action<TError> onError) => this;
-        
-        public virtual Task<Result<TValue, TError>> OnErrorAsync(Func<TError, Task> onError) => Task.FromResult(this);
+		public virtual Result<TValue, TError> OnSuccess(Action<TValue> onSuccess) => this;
 
-        public virtual Result<TValue, TError> OnBoth(Action onBoth)
-        {
-            onBoth();
+		public virtual Task<Result<TValue, TError>> OnSuccessAsync(Func<TValue, Task> onSuccess) =>
+			Task.FromResult(this);
 
-            return this;
-        }
+		public virtual Result<TValue, TError> OnError(Action<TError> onError) => this;
 
-        public virtual async Task<Result<TValue, TError>> OnBothAsync(Func<Task> onBoth)
-        {
-	        await onBoth();
+		public virtual Task<Result<TValue, TError>> OnErrorAsync(Func<TError, Task> onError) => Task.FromResult(this);
 
-	        return this;
-        }
+		public virtual Result<TValue, TError> OnBoth(Action onBoth)
+		{
+			onBoth();
 
-        public abstract void Match(Action<TValue> matchValue, Action<TError> matchError);
+			return this;
+		}
 
-        public abstract Task MatchAsync(Func<TValue, Task> matchValue, Func<TError, Task> matchError);
+		public virtual async Task<Result<TValue, TError>> OnBothAsync(Func<Task> onBoth)
+		{
+			await onBoth();
 
-        public abstract TOut Match<TOut>(Func<TValue, TOut> matchValue, Func<TError, TOut> matchError);
+			return this;
+		}
 
-        public abstract Task<TOut> MatchAsync<TOut>(Func<TValue, Task<TOut>> matchValue,
-            Func<TError, Task<TOut>> matchError);
+		#endregion
 
-        private protected static void Validate<T>(T value)
-        {
-            var isNotValueType = !typeof(T).IsValueType;
-            var isNullableValueType = Nullable.GetUnderlyingType(typeof(T)) != null;
-            var hasDefaultValue = EqualityComparer<T>.Default.Equals(value, default);
+		#region Match
 
-            if ((isNotValueType || isNullableValueType) && hasDefaultValue)
-                throw new InvalidOperationException();
-        }
+		public abstract void Match(
+			Action<TValue> matchValue,
+			Action<TError> matchError);
 
-        #region Select
+		public abstract TOut Match<TOut>(
+			Func<TValue, TOut> matchValue,
+			Func<TError, TOut> matchError);
 
-        public abstract Result<UValue, UError> Select<UValue, UError>(
-            Func<TValue, UValue> mapValue,
-            Func<TError, UError> mapError);
+		public abstract Task MatchAsync(
+			Func<TValue, Task> matchValue,
+			Func<TError, Task> matchError);
 
-        public abstract Task<Result<UValue, UError>> SelectAsync<UValue, UError>(
-            Func<TValue, Task<UValue>> mapValue,
-            Func<TError, Task<UError>> mapError);
+		public abstract Task<TOut> MatchAsync<TOut>(
+			Func<TValue, Task<TOut>> matchValue,
+			Func<TError, Task<TOut>> matchError);
 
-        public abstract Result<UValue, TError> Select<UValue>(
-            Func<TValue, UValue> mapValue);
+		#endregion
 
-        public abstract Task<Result<UValue, TError>> SelectAsync<UValue>(
-            Func<TValue, Task<UValue>> mapValue);
+		#region Select
 
-        public abstract Result<UError> SelectSwitch<UError>(
-            Func<TError, UError> mapError);
+		public abstract Result<UValue, UError> Select<UValue, UError>(
+			Func<TValue, UValue> mapValue,
+			Func<TError, UError> mapError);
 
-        public abstract Result<TError> SelectSwitch();
+		public abstract Result<UValue, TError> Select<UValue>(
+			Func<TValue, UValue> mapValue);
 
-        #endregion
+		public abstract Result<TValue, UError> Select<UError>(
+			Func<TError, UError> mapError);
 
-        #region SelectMany
+		public abstract Result<UError> SelectSwitch<UError>(
+			Action<TValue>       mapValue,
+			Func<TError, UError> mapError);
 
-        public abstract Result<UValue, UError> SelectMany<UValue, UError>(
-            Func<TValue, Result<UValue, UError>> mapValue,
-            Func<TError, Result<UValue, UError>> mapError);
+		public abstract Result<TError> SelectSwitch(
+			Action<TValue> mapValue);
 
-        public abstract Task<Result<UValue, UError>> SelectManyAsync<UValue, UError>(
-            Func<TValue, Task<Result<UValue, UError>>> mapValue,
-            Func<TError, Task<Result<UValue, UError>>> mapError);
+		public abstract Result<UError> SelectSwitch<UError>(
+			Func<TError, UError> mapError);
 
-        public abstract Result<UValue, TError> SelectMany<UValue>(
-            Func<TValue, Result<UValue, TError>> mapValue);
+		public abstract Task<Result<UValue, UError>> SelectAsync<UValue, UError>(
+			Func<TValue, Task<UValue>> mapValue,
+			Func<TError, Task<UError>> mapError);
 
-        public abstract Task<Result<UValue, TError>> SelectManyAsync<UValue>(
-            Func<TValue, Task<Result<UValue, TError>>> mapValue);
+		public abstract Task<Result<UValue, TError>> SelectAsync<UValue>(
+			Func<TValue, Task<UValue>> mapValue);
 
-        public abstract Result<UError> SelectMany<UError>(
-            Func<TValue, Result<UError>> mapValue,
-            Func<TError, Result<UError>> mapError);
+		public abstract Task<Result<TValue, UError>> SelectAsync<UError>(
+			Func<TError, Task<UError>> mapError);
 
-        public abstract Task<Result<UError>> SelectManyAsync<UError>(
-            Func<TValue, Task<Result<UError>>> mapValue,
-            Func<TError, Task<Result<UError>>> mapError);
+		public abstract Task<Result<UError>> SelectSwitchAsync<UError>(
+			Func<TValue, Task>         mapValue,
+			Func<TError, Task<UError>> mapError);
 
-        public abstract Result<TError> SelectMany(
-            Func<TValue, Result<TError>> mapValue);
+		public abstract Task<Result<TError>> SelectSwitchAsync(
+			Func<TValue, Task> mapValue);
 
-        public abstract Task<Result<TError>> SelectManyAsync(
-            Func<TValue, Task<Result<TError>>> mapValue);
+		public abstract Task<Result<UError>> SelectSwitchAsync<UError>(
+			Func<TError, Task<UError>> mapError);
 
-        #endregion
-    }
+		#endregion
+
+		#region SelectMany
+
+		public abstract Result<UValue, UError> SelectMany<UValue, UError>(
+			Func<TValue, Result<UValue, UError>> mapValue,
+			Func<TError, Result<UValue, UError>> mapError);
+
+		public abstract Result<UValue, TError> SelectMany<UValue>(
+			Func<TValue, Result<UValue, TError>> mapValue);
+
+		public abstract Result<TValue, UError> SelectMany<UError>(
+			Func<TError, Result<TValue, UError>> mapError);
+
+		public abstract Result<UError> SelectSwitchMany<UError>(
+			Func<TValue, Result<UError>> mapValue,
+			Func<TError, Result<UError>> mapError);
+
+		public abstract Result<TError> SelectSwitchMany(
+			Func<TValue, Result<TError>> mapValue);
+
+		public abstract Result<UError> SelectSwitchMany<UError>(
+			Func<TError, Result<UError>> mapError);
+
+		public abstract Task<Result<UValue, UError>> SelectManyAsync<UValue, UError>(
+			Func<TValue, Task<Result<UValue, UError>>> mapValue,
+			Func<TError, Task<Result<UValue, UError>>> mapError);
+
+		public abstract Task<Result<UValue, TError>> SelectManyAsync<UValue>(
+			Func<TValue, Task<Result<UValue, TError>>> mapValue);
+
+		public abstract Task<Result<TValue, UError>> SelectManyAsync<UError>(
+			Func<TError, Task<Result<TValue, UError>>> mapError);
+
+		public abstract Task<Result<UError>> SelectSwitchManyAsync<UError>(
+			Func<TValue, Task<Result<UError>>> mapValue,
+			Func<TError, Task<Result<UError>>> mapError);
+
+		public abstract Task<Result<TError>> SelectSwitchManyAsync(
+			Func<TValue, Task<Result<TError>>> mapValue);
+
+		public abstract Task<Result<UError>> SelectSwitchManyAsync<UError>(
+			Func<TError, Task<Result<UError>>> mapError);
+
+		#endregion
+	}
 }

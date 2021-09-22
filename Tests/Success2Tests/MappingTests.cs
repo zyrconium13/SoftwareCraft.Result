@@ -50,22 +50,6 @@
 		}
 
 		[TestMethod]
-		public void MapsAndWrapsTheValueButDoesNotChangeTheErrorType()
-		{
-			// Result<RedDragon, PinkLily> -> Result<VioletIris, PinkLily>
-
-			var mappedResult = result.Select(
-				v =>
-				{
-					spy.Trip(v);
-					return new VioletIris();
-				});
-
-			Assert.IsInstanceOfType(mappedResult, typeof(Success<VioletIris, PinkLily>));
-			spy.VerifyTrip(1, successValue);
-		}
-
-		[TestMethod]
 		public void MapsAndFlattensTheValueAndChangesTheErrorType()
 		{
 			// Result<RedDragon, PinkLily> -> Result<VioletIris, GreenTurtle>

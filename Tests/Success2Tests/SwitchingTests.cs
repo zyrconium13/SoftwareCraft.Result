@@ -1,6 +1,7 @@
 ﻿namespace Tests.Success2Tests
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,11 +22,11 @@
 
 		public SwitchingTests()
 		{
-			successValue = new RedDragon();
+			successValue = new();
 
 			result = Result.Success<RedDragon, PinkLily>(successValue);
 
-			spy = new Spy();
+			spy = new();
 		}
 
 		[TestMethod]
@@ -34,6 +35,7 @@
 			// Result<RedDragon, PinkLily> -> Result<GreenTurtle>
 
 			var mappedResult = result.SelectSwitch(
+				v => { },
 				e =>
 				{
 					spy.Trip(e);
@@ -45,22 +47,11 @@
 		}
 
 		[TestMethod]
-		public void SwitchesToResult1ButDoesNotChangeTheErrorType()
-		{
-			// Result<RedDragon, PinkLily> -> Result<PinkLily>
-
-			var mappedResult = result.SelectSwitch();
-
-			Assert.IsInstanceOfType(mappedResult, typeof(Success<PinkLily>));
-			spy.VerifyTrip(0);
-		}
-
-		[TestMethod]
 		public void SwitchesToResult1AndChangesTheErrorTypeAndFlattens()
 		{
 			// Result<RedDragon, PinkLily> -> Result<GreenTurtle>
 
-			var mappedResult = result.SelectMany(
+			var mappedResult = result.SelectSwitchMany(
 				v =>
 				{
 					spy.Trip(v);
@@ -81,7 +72,7 @@
 		{
 			// Result<RedDragon, PinkLily> -> Result<PinkLily>
 
-			var mappedResult = result.SelectMany(
+			var mappedResult = result.SelectSwitchMany<PinkLily>(
 				v =>
 				{
 					spy.Trip(v);
