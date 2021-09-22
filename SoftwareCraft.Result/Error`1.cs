@@ -53,19 +53,41 @@
 		public override Result<UError> Select<UError>(Action mapSuccess, Func<TError, UError> mapError) =>
 			new Error<UError>(mapError(error));
 
+		public override Result<UValue, UError> SelectSwitch<UValue, UError>(
+			Func<UValue> mapSuccess, Func<TError, UError> mapError)
+			=> new Error<UValue, UError>(mapError(error));
+
 		public override async Task<Result<UError>> SelectAsync<UError>(
 			Func<Task>                 mapSuccess,
 			Func<TError, Task<UError>> mapError)
 			=> new Error<UError>(await mapError(error));
+
+		public override async Task<Result<UValue, UError>>
+			SelectSwitchAsync<UValue, UError>(
+				Func<Task<UValue>>         mapSuccess,
+				Func<TError, Task<UError>> mapError)
+			=> new Error<UValue, UError>(await mapError(error));
 
 		public override Result<UError> SelectMany<UError>(
 			Func<Result<UError>>         mapSuccess,
 			Func<TError, Result<UError>> mapError)
 			=> mapError(error);
 
+		public override Result<UValue, UError>
+			SelectSwitchMany<UValue, UError>(
+				Func<Result<UValue, UError>>         mapSuccess,
+				Func<TError, Result<UValue, UError>> mapError)
+			=> mapError(error);
+
 		public override Task<Result<UError>> SelectManyAsync<UError>(
 			Func<Task<Result<UError>>>         mapSuccess,
 			Func<TError, Task<Result<UError>>> mapError)
 			=> mapError(error);
+
+		public override async Task<Result<UValue, UError>>
+			SelectSwitchManyAsync<UValue, UError>(
+				Func<Task<Result<UValue, UError>>>         mapSuccess,
+				Func<TError, Task<Result<UValue, UError>>> mapError)
+			=> await mapError(error);
 	}
 }

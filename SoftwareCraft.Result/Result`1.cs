@@ -42,17 +42,36 @@ namespace SoftwareCraft.Functional
 			Action               mapSuccess,
 			Func<TError, UError> mapError);
 
+		public abstract Result<UValue, UError> SelectSwitch<UValue, UError>(
+			Func<UValue>         mapSuccess,
+			Func<TError, UError> mapError);
+
 		public abstract Task<Result<UError>> SelectAsync<UError>(
 			Func<Task>                 mapSuccess,
 			Func<TError, Task<UError>> mapError);
+
+		public abstract Task<Result<UValue, UError>>
+			SelectSwitchAsync<UValue, UError>(
+				Func<Task<UValue>>         mapSuccess,
+				Func<TError, Task<UError>> mapError);
 
 		public abstract Result<UError> SelectMany<UError>(
 			Func<Result<UError>>         mapSuccess,
 			Func<TError, Result<UError>> mapError);
 
+		public abstract Result<UValue, UError>
+			SelectSwitchMany<UValue, UError>(
+				Func<Result<UValue, UError>>         mapSuccess,
+				Func<TError, Result<UValue, UError>> mapError);
+
 		public abstract Task<Result<UError>> SelectManyAsync<UError>(
 			Func<Task<Result<UError>>>         mapSuccess,
 			Func<TError, Task<Result<UError>>> mapError);
+
+		public abstract Task<Result<UValue, UError>>
+			SelectSwitchManyAsync<UValue, UError>(
+				Func<Task<Result<UValue, UError>>>         mapSuccess,
+				Func<TError, Task<Result<UValue, UError>>> mapError);
 
 		private protected static void Validate<T>(T value)
 		{
