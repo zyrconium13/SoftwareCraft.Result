@@ -56,6 +56,66 @@
 
 				      return "another error async";
 			      });
+
+			Result.Success<string>()
+			      .SelectMany(() =>
+			      {
+				      Console.WriteLine("Handle success many.");
+
+				      return Result.Success<string>();
+			      }, error =>
+			      {
+				      Console.WriteLine($"Handle error many '{error}'.");
+
+				      return Result.Error("another error many");
+			      });
+
+			Result.Error("original error")
+			      .SelectMany(() =>
+			      {
+				      Console.WriteLine("Handle success many.");
+
+				      return Result.Success<string>();
+			      }, error =>
+			      {
+				      Console.WriteLine($"Handle error many '{error}'.");
+
+				      return Result.Error("another error many");
+			      });
+
+			Result.Success<string>()
+			      .SelectManyAsync(async () =>
+			      {
+				      Console.WriteLine("Handle success many async.");
+
+				      await Task.Delay(100);
+
+				      return Result.Success<string>();
+			      }, async error =>
+			      {
+				      Console.WriteLine($"Handle error many async '{error}'.");
+
+				      await Task.Delay(100);
+
+				      return Result.Error("another error many async");
+			      });
+
+			Result.Error("original error")
+			      .SelectManyAsync(async () =>
+			      {
+				      Console.WriteLine("Handle success many async.");
+
+				      await Task.Delay(100);
+
+				      return Result.Success<string>();
+			      }, async error =>
+			      {
+				      Console.WriteLine($"Handle error many async '{error}'.");
+
+				      await Task.Delay(100);
+
+				      return Result.Error("another error many async");
+			      });
 		}
 	}
 }

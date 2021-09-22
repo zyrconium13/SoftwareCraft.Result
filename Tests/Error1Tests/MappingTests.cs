@@ -49,11 +49,13 @@
 		[TestMethod]
 		public void MapsAndFlattensErrorValue()
 		{
-			var newResult = result.SelectMany(e =>
-			{
-				spy.Trip(e);
-				return Result.Error(new VioletIris());
-			});
+			var newResult = result.SelectMany(
+				Result.Success<VioletIris>,
+				e =>
+				{
+					spy.Trip(e);
+					return Result.Error(new VioletIris());
+				});
 
 			Assert.IsInstanceOfType(newResult, typeof(Result<VioletIris>));
 			Assert.IsInstanceOfType(newResult, typeof(Error<VioletIris>));

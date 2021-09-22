@@ -41,11 +41,13 @@
 		[TestMethod]
 		public void DoesNotMapErrorValue2()
 		{
-			var newResult = result.SelectMany(e =>
-			{
-				spy.Trip(e);
-				return Result.Success<PinkLily>();
-			});
+			var newResult = result.SelectMany(
+				Result.Success<PinkLily>,
+				e =>
+				{
+					spy.Trip(e);
+					return Result.Success<PinkLily>();
+				});
 
 			spy.VerifyTrip(0);
 			Assert.IsInstanceOfType(newResult, typeof(Success<PinkLily>));
