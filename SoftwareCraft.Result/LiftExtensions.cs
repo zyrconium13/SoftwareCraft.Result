@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SoftwareCraft.Functional
 {
-    public static class ResultExtensions
+    public static class LiftExtensions
     {
         #region Lift2
 
@@ -179,5 +179,12 @@ namespace SoftwareCraft.Functional
                 e1 => Task.FromResult(Result.Error<Tuple<T1, T2, T3, T4, T5>, TError>(e1)));
 
         #endregion
+    }
+
+    public static class Extensions
+    {
+	    public static Result<T, string> AsSuccess<T>(this T @this) => Result.Success<T, string>(@this);
+
+	    public static Result<T, string> AsError<T>(this string @this) => Result.Error<T, string>(@this);
     }
 }
