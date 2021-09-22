@@ -34,13 +34,21 @@ namespace SoftwareCraft.Functional
             Func<TError, Task<TOut>> matchError)
             => matchValue();
 
-        public override Result<UError> Select<UError>(
-            Func<TError, UError> mapError)
-            => new Success<UError>();
+        public override Result<UError> Select<UError>(Action mapSuccess, Func<TError, UError> mapError)
+        {
+	        mapSuccess();
 
-        public override Task<Result<UError>> SelectAsync<UError>(
+	        return new Success<UError>();
+        }
+
+        public override async Task<Result<UError>> SelectAsync<UError>(
+            Func<Task> mapSuccess,
             Func<TError, Task<UError>> mapError)
-            => Task.FromResult((Result<UError>) new Success<UError>());
+        {
+	        await mapSuccess();
+	        
+	        return new Success<UError>();
+        }
 
         public override Result<UError> SelectMany<UError>(
             Func<TError, Result<UError>> mapError)

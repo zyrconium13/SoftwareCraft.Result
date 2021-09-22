@@ -5,7 +5,7 @@
     <RootNamespace>SoftwareCraft.Functional</RootNamespace>
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.0.2</Version>
+    <Version>4.0.0.0</Version>
     <Authors>SoftwareCraft</Authors>
     <Company>SoftwareCraft</Company>
     <PackageProjectUrl>https://github.com/zyrconium13/SoftwareCraft.Result</PackageProjectUrl>
@@ -13,10 +13,10 @@
     <PackageTags>result c-sharp functional-programming dotnet core standard</PackageTags>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>SoftwareCraftKey.pfx</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>3.0.0.2</AssemblyVersion>
-    <FileVersion>3.0.0.2</FileVersion>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <FileVersion>4.0.0.0</FileVersion>
     <Description>SoftwareCraft.Result represents the OOP implementation of a functional concept. Instead of throwing an exception, return a Result, and the code will be much cleaner and the intent much clearer.</Description>
-    <PackageReleaseNotes>Async versions for OnSuccess, OnError and OnBoth.</PackageReleaseNotes>
+    <PackageReleaseNotes>Complete overhaul of Result&lt;T&gt; API.</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>

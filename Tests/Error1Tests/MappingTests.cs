@@ -1,11 +1,11 @@
 ﻿namespace Tests.Error1Tests
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-	using SampleTypes.Reference;
 	using SampleTypes.Value;
 
 	using SoftwareCraft.Functional;
@@ -21,9 +21,9 @@
 
 		public MappingTests()
 		{
-			errorValue = new PinkLily();
-			result = Result.Error(errorValue);
-			spy = new Spy();
+			errorValue = new();
+			result     = Result.Error(errorValue);
+			spy        = new();
 		}
 
 		public void Dispose()
@@ -34,11 +34,13 @@
 		[TestMethod]
 		public void MapsAndWrapsErrorValue()
 		{
-			var newResult = result.Select(e =>
-			{
-				spy.Trip(e);
-				return new VioletIris();
-			});
+			var newResult = result.Select(
+				() => { },
+				e =>
+				{
+					spy.Trip(e);
+					return new VioletIris();
+				});
 
 			Assert.IsInstanceOfType(newResult, typeof(Result<VioletIris>));
 			Assert.IsInstanceOfType(newResult, typeof(Error<VioletIris>));

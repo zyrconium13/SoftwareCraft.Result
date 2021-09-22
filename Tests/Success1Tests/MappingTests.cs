@@ -1,11 +1,11 @@
 ﻿namespace Tests.Success1Tests
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-	using SampleTypes.Reference;
 	using SampleTypes.Value;
 
 	using SoftwareCraft.Functional;
@@ -20,17 +20,19 @@
 		public MappingTests()
 		{
 			result = Result.Success<VioletIris>();
-			spy = new Spy();
+			spy    = new();
 		}
 
 		[TestMethod]
 		public void DoesNotMapErrorValue()
 		{
-			var newResult = result.Select(e =>
-			{
-				spy.Trip(e);
-				return new PinkLily();
-			});
+			var newResult = result.Select(
+				() => { },
+				e =>
+				{
+					spy.Trip(e);
+					return new PinkLily();
+				});
 
 			spy.VerifyTrip(0);
 			Assert.IsInstanceOfType(newResult, typeof(Success<PinkLily>));
