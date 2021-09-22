@@ -12,13 +12,13 @@
 	[TestClass]
 	public class OnMethodsTests
 	{
-		private readonly Result<PinkLily> result;
+		private readonly Result<PinkLily> sut;
 
 		private readonly Spy spy;
 
 		public OnMethodsTests()
 		{
-			result = Result.Success<PinkLily>();
+			sut = Result.Success<PinkLily>();
 
 			spy = new Spy();
 		}
@@ -26,31 +26,31 @@
 		[TestMethod]
 		public void OnSuccessIsCalled()
 		{
-			var forwardedResult = result.OnSuccess(() => { spy.Trip(); });
+			var forwardedResult = sut.OnSuccess(() => { spy.Trip(); });
 
 			spy.VerifyTrip(1);
 
-			Assert.AreSame(result, forwardedResult);
+			Assert.AreSame(sut, forwardedResult);
 		}
 
 		[TestMethod]
 		public void OnErrorIsNotCalled()
 		{
-			var forwardedResult = result.OnError(e => { spy.Trip(e); });
+			var forwardedResult = sut.OnError(e => { spy.Trip(e); });
 
 			spy.VerifyTrip(0);
 
-			Assert.AreSame(result, forwardedResult);
+			Assert.AreSame(sut, forwardedResult);
 		}
 
 		[TestMethod]
 		public void OnBothIsCalled()
 		{
-			var forwardedResult = result.OnBoth(() => { spy.Trip(); });
+			var forwardedResult = sut.OnBoth(() => { spy.Trip(); });
 
 			spy.VerifyTrip(1);
 
-			Assert.AreSame(result, forwardedResult);
+			Assert.AreSame(sut, forwardedResult);
 		}
 	}
 }
