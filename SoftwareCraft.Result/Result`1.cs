@@ -10,11 +10,22 @@ namespace SoftwareCraft.Functional
 	{
 		public virtual Result<TError> OnSuccess(Action onSuccess) => this;
 
+		public virtual Task<Result<TError>> OnSuccessAsync(Func<Task> onSuccess) => Task.FromResult(this);
+
 		public virtual Result<TError> OnError(Action<TError> onError) => this;
+
+		public virtual Task<Result<TError>> OnErrorAsync(Func<TError, Task> onError) => Task.FromResult(this);
 
 		public Result<TError> OnBoth(Action onBoth)
 		{
 			onBoth();
+
+			return this;
+		}
+
+		public async Task<Result<TError>> OnBothAsync(Func<Task> onBoth)
+		{
+			await onBoth();
 
 			return this;
 		}
@@ -27,7 +38,9 @@ namespace SoftwareCraft.Functional
 
 		public abstract Task<TOut> MatchAsync<TOut>(Func<Task<TOut>> matchValue, Func<TError, Task<TOut>> matchError);
 
-		public abstract Result<UError> Select<UError>(Action mapSuccess, Func<TError, UError> mapError);
+		public abstract Result<UError> Select<UError>(
+			Action               mapSuccess,
+			Func<TError, UError> mapError);
 
 		public abstract Task<Result<UError>> SelectAsync<UError>(
 			Func<Task>                 mapSuccess,

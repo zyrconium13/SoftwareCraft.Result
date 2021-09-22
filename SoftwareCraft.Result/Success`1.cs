@@ -14,6 +14,13 @@
 			return this;
 		}
 
+		public override async Task<Result<TError>> OnSuccessAsync(Func<Task> onSuccess)
+		{
+			await onSuccess();
+
+			return this;
+		}
+
 		public override void Match(
 			Action         matchValue,
 			Action<TError> matchError)

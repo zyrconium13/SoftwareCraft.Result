@@ -23,6 +23,13 @@
 			return this;
 		}
 
+		public override async Task<Result<TError>> OnErrorAsync(Func<TError, Task> onError)
+		{
+			await onError(error);
+
+			return this;
+		}
+
 		public override void Match(
 			Action         matchValue,
 			Action<TError> matchError)
