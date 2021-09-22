@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SoftwareCraft.Functional.Error&lt;TError&gt;" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Error`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoftwareCraft.Functional.Error&lt;TValue, TError&gt;" Collapsed="true">
+    <Position X="3.25" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Error`2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoftwareCraft.Functional.Result" Collapsed="true">
+    <Position X="6" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Result.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoftwareCraft.Functional.Result&lt;TError&gt;" Collapsed="true">
+    <Position X="1.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAACAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Result`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoftwareCraft.Functional.Result&lt;TValue, TError&gt;" Collapsed="true">
+    <Position X="2" Y="1" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAACAAAAAAAAAAAAAAAAAAQAAAAAAgAA=</HashCode>
+      <FileName>Result`2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoftwareCraft.Functional.Success&lt;TError&gt;" Collapsed="true">
+    <Position X="2.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Success`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoftwareCraft.Functional.Success&lt;TValue, TError&gt;" Collapsed="true">
+    <Position X="0.5" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Success`2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
