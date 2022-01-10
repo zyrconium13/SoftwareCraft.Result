@@ -21,6 +21,24 @@ namespace SoftwareCraft.Functional
 		{
 			#region Lift2
 
+            public static Result<TError> Lift<TError>
+            (
+                Result<TError> r1,
+                Result<TError> r2
+            )
+                => r1.SelectMany(
+                    _ => r2.SelectMany(
+                        _ => Success<TError>()));
+
+            public static async Task<Result<TError>> LiftAsync<TError>
+            (
+                Task<Result<TError>> r1,
+                Task<Result<TError>> r2
+            )
+                => await (await r1).SelectManyAsync(
+                    async _ => (await r2).SelectMany(
+                        _ => Success<TError>()));
+
 			public static Result<Tuple<T1, T2>, TError> Lift<T1, T2, TError>
 			(
 				Result<T1, TError> r1,
@@ -29,6 +47,15 @@ namespace SoftwareCraft.Functional
 				=> r1.SelectMany(
 					t1 => r2.SelectMany(
 						t2 => Result.Success<Tuple<T1, T2>, TError>(Tuple.Create(t1, t2))));
+
+            public static async Task<Result<Tuple<T1, T2>, TError>> LiftAsync<T1, T2, TError>
+            (
+                Task<Result<T1, TError>> r1,
+                Task<Result<T2, TError>> r2
+            )
+                => await (await r1).SelectManyAsync(
+                    async t1 => (await r2).SelectMany(
+                        t2 => Result.Success<Tuple<T1, T2>, TError>(Tuple.Create(t1, t2))));
 
 			public static Result<Tuple<T1, T2>, TError> LiftLazy<T1, T2, TError>
 			(
@@ -53,6 +80,28 @@ namespace SoftwareCraft.Functional
 
 			#region Lift3
 
+            public static Result<TError> Lift<TError>
+            (
+                Result<TError> r1,
+                Result<TError> r2,
+                Result<TError> r3
+            )
+                => r1.SelectMany(
+                    _ => r2.SelectMany(
+                        _ => r3.SelectMany(
+                            _ => Success<TError>())));
+
+            public static async Task<Result<TError>> LiftAsync<TError>
+            (
+                Task<Result<TError>> r1,
+                Task<Result<TError>> r2,
+                Task<Result<TError>> r3
+            )
+                => await (await r1).SelectManyAsync(
+                    async _ => await (await r2).SelectManyAsync(
+                        async _ => (await r3).SelectMany(
+                            _ => Success<TError>())));
+
 			public static Result<Tuple<T1, T2, T3>, TError> Lift<T1, T2, T3, TError>
 			(
 				Result<T1, TError> r1,
@@ -63,6 +112,19 @@ namespace SoftwareCraft.Functional
 					t1 => r2.SelectMany(
 						t2 => r3.SelectMany(
 							t3 => Result.Success<Tuple<T1, T2, T3>, TError>(Tuple.Create(t1, t2, t3)))));
+
+            public static async Task<Result<Tuple<T1, T2, T3>, TError>> LiftAsync<T1, T2, T3, TError>
+            (
+                Task<Result<T1, TError>> r1,
+                Task<Result<T2, TError>> r2,
+                Task<Result<T3, TError>> r3
+
+            )
+                => await (await r1).SelectManyAsync(
+                    async t1 => await (await r2).SelectManyAsync(
+                       async t2 => (await r3).SelectMany(
+                            t3 => Result.Success<Tuple<T1, T2, T3>, TError>(Tuple.Create(t1, t2, t3)))));
+
 
 			public static Result<Tuple<T1, T2, T3>, TError> LiftLazy<T1, T2, T3, TError>
 			(
@@ -92,6 +154,32 @@ namespace SoftwareCraft.Functional
 
 			#region Lift4
 
+            public static Result<TError> Lift<TError>
+            (
+                Result<TError> r1,
+                Result<TError> r2,
+                Result<TError> r3,
+				Result<TError> r4
+            )
+                => r1.SelectMany(
+                    _ => r2.SelectMany(
+                        _ => r3.SelectMany(
+                            _ => r4.SelectMany(
+                                _ => Success<TError>()))));
+
+            public static async Task<Result<TError>> LiftAsync<TError>
+            (
+                Task<Result<TError>> r1,
+                Task<Result<TError>> r2,
+                Task<Result<TError>> r3,
+                Task<Result<TError>> r4
+            )
+                => await (await r1).SelectManyAsync(
+                    async _ => await (await r2).SelectManyAsync(
+                        async _ => await (await r3).SelectManyAsync(
+                            async _ => (await r4).SelectMany(
+                                _ => Success<TError>()))));
+
 			public static Result<Tuple<T1, T2, T3, T4>, TError> Lift<T1, T2, T3, T4, TError>
 			(
 				Result<T1, TError> r1,
@@ -104,6 +192,20 @@ namespace SoftwareCraft.Functional
 						t2 => r3.SelectMany(
 							t3 => r4.SelectMany(
 								t4 => Result.Success<Tuple<T1, T2, T3, T4>, TError>(Tuple.Create(t1, t2, t3, t4))))));
+
+            public static async Task<Result<Tuple<T1, T2, T3, T4>, TError>> LiftAsync<T1, T2, T3, T4, TError>
+            (
+                Task<Result<T1, TError>> r1,
+                Task<Result<T2, TError>> r2,
+                Task<Result<T3, TError>> r3,
+                Task<Result<T4, TError>> r4
+            )
+                => await (await r1).SelectManyAsync(
+                    async t1 => await (await r2).SelectManyAsync(
+                        async t2 => await (await r3).SelectManyAsync(
+                            async t3 => (await r4).SelectMany(
+                                t4 => Result.Success<Tuple<T1, T2, T3, T4>, TError>(Tuple.Create(t1, t2, t3, t4))))));
+
 
 			public static Result<Tuple<T1, T2, T3, T4>, TError> LiftLazy<T1, T2, T3, T4, TError>
 			(
@@ -138,6 +240,36 @@ namespace SoftwareCraft.Functional
 
 			#region Lift5
 
+            public static Result<TError> Lift<TError>
+            (
+                Result<TError> r1,
+                Result<TError> r2,
+                Result<TError> r3,
+                Result<TError> r4,
+                Result<TError> r5
+            )
+                => r1.SelectMany(
+                    _ => r2.SelectMany(
+                        _ => r3.SelectMany(
+                            _ => r4.SelectMany(
+                                _ => r5.SelectMany(
+                                    _ => Success<TError>())))));
+
+            public static async Task<Result<TError>> LiftAsync<TError>
+            (
+                Task<Result<TError>> r1,
+                Task<Result<TError>> r2,
+                Task<Result<TError>> r3,
+                Task<Result<TError>> r4,
+                Task<Result<TError>> r5
+            )
+                => await (await r1).SelectManyAsync(
+                    async _ => await (await r2).SelectManyAsync(
+                        async _ => await (await r3).SelectManyAsync(
+                            async _ => await (await r4).SelectManyAsync(
+                                async _ => (await r5).SelectMany(
+                                    _ => Success<TError>())))));
+
 			public static Result<Tuple<T1, T2, T3, T4, T5>, TError> Lift<T1, T2, T3, T4, T5, TError>
 			(
 				Result<T1, TError> r1,
@@ -153,6 +285,21 @@ namespace SoftwareCraft.Functional
 								t4 => r5.SelectMany(
 									t5 => Result.Success<Tuple<T1, T2, T3, T4, T5>, TError>(
 										Tuple.Create(t1, t2, t3, t4, t5)))))));
+
+            public static async Task<Result<Tuple<T1, T2, T3, T4, T5>, TError>> LiftAsync<T1, T2, T3, T4, T5, TError>
+            (
+                Task<Result<T1, TError>> r1,
+                Task<Result<T2, TError>> r2,
+                Task<Result<T3, TError>> r3,
+                Task<Result<T4, TError>> r4,
+                Task<Result<T5, TError>> r5
+            )
+                => await (await r1).SelectManyAsync(
+                    async t1 => await (await r2).SelectManyAsync(
+                        async t2 => await (await r3).SelectManyAsync(
+                            async t3 => await (await r4).SelectManyAsync(
+                                async t4 => (await r5).SelectMany(
+                                    t5 => Result.Success<Tuple<T1, T2, T3, T4, T5>, TError>(Tuple.Create(t1, t2, t3, t4, t5)))))));
 
 			public static Result<Tuple<T1, T2, T3, T4, T5>, TError> LiftLazy<T1, T2, T3, T4, T5, TError>
 			(
