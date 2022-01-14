@@ -106,7 +106,7 @@ public static class Result
 
 		#region Lift3
 
-		#region Result`2
+		#region Result`1
 
 		public static Result<TError> Lift<TError>
 		(
@@ -115,9 +115,20 @@ public static class Result
 			Result<TError> r3
 		)
 			=> r1.SelectMany(
-				_ => r2.SelectMany(
-					_ => r3.SelectMany(
-						_ => Success<TError>())));
+				() => r2.SelectMany(
+					() => r3.SelectMany(
+						Success<TError>)));
+
+		public static Result<TError> LiftLazy<TError>
+		(
+			Func<Result<TError>> r1,
+			Func<Result<TError>> r2,
+			Func<Result<TError>> r3
+		)
+			=> r1().SelectMany(
+				() => r2().SelectMany(
+					() => r3().SelectMany(
+						Success<TError>)));
 
 		public static async Task<Result<TError>> LiftAsync<TError>
 		(
@@ -126,9 +137,13 @@ public static class Result
 			Task<Result<TError>> r3
 		)
 			=> await (await r1).SelectManyAsync(
-				async _ => await (await r2).SelectManyAsync(
-					async _ => (await r3).SelectMany(
-						_ => Success<TError>())));
+				async () => await (await r2).SelectManyAsync(
+					async () => (await r3).SelectMany(
+						Success<TError>)));
+
+		#endregion
+
+		#region Result`2
 
 		public static Result<Tuple<T1, T2, T3>, TError> Lift<T1, T2, T3, TError>
 		(
