@@ -132,4 +132,43 @@ public class Result1LiftingTests
 	}
 
 	#endregion
+
+	#region LiftLazyAsync
+
+	[Fact(DisplayName = "Lifting lazy async over two successes returns success")]
+	public async Task Test41()
+	{
+		var ftr1 = () => Task.FromResult(Result.Success<PinkLily>());
+		var ftr2 = () => Task.FromResult(Result.Success<PinkLily>());
+
+		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2);
+
+		lift.IsSuccess.Should().BeTrue();
+	}
+
+	[Fact(DisplayName = "Lifting lazy async over the first error returns an error")]
+	public async Task Test42()
+	{
+		var ftr1 = () => Task.FromResult(Result.Error("A"));
+		var ftr2 = () => Task.FromResult(Result.Success<string>());
+
+		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2);
+
+		lift.IsSuccess.Should().BeFalse();
+		lift.OnError(error => error.Should().Be("A"));
+	}
+
+	[Fact(DisplayName = "Lifting lazy async over the second error returns an error")]
+	public async Task Test43()
+	{
+		var ftr1 = () => Task.FromResult(Result.Success<string>());
+		var ftr2 = () => Task.FromResult(Result.Error("B"));
+
+		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2);
+
+		lift.IsSuccess.Should().BeFalse();
+		lift.OnError(error => error.Should().Be("B"));
+	}
+
+	#endregion
 }

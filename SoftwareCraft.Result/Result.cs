@@ -50,6 +50,15 @@ public static class Result
 				() => r2().SelectMany(
 					Success<TError>));
 
+		public static async Task<Result<TError>> LiftLazyAsync<TError>
+		(
+			Func<Task<Result<TError>>> r1,
+			Func<Task<Result<TError>>> r2
+		)
+			=> await (await r1()).SelectManyAsync(
+				async () => (await r2()).SelectMany(
+					Success<TError>));
+
 		#endregion
 
 		#region Result`2
