@@ -106,6 +106,8 @@ public static class Result
 
 		#region Lift3
 
+		#region Result`2
+
 		public static Result<TError> Lift<TError>
 		(
 			Result<TError> r1,
@@ -176,7 +178,11 @@ public static class Result
 
 		#endregion
 
+		#endregion
+
 		#region Lift4
+
+		#region Result`2
 
 		public static Result<TError> Lift<TError>
 		(
@@ -261,7 +267,11 @@ public static class Result
 
 		#endregion
 
+		#endregion
+
 		#region Lift5
+
+		#region Result`2
 
 		public static Result<TError> Lift<TError>
 		(
@@ -359,6 +369,8 @@ public static class Result
 						e3 => Task.FromResult(Error<Tuple<T1, T2, T3, T4, T5>, TError>(e3))),
 					e2 => Task.FromResult(Error<Tuple<T1, T2, T3, T4, T5>, TError>(e2))),
 				e1 => Task.FromResult(Error<Tuple<T1, T2, T3, T4, T5>, TError>(e1)));
+
+		#endregion
 
 		#endregion
 	}

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Tests.LiftingTests;
 
-namespace Tests.LiftingTests;
+using System;
+using System.Collections.Generic;
 
 using FluentAssertions;
 
@@ -14,7 +14,7 @@ using SoftwareCraft.Functional;
 
 using Xunit;
 
-public class Result1LiftingTests
+public class Result1Lifting2Tests
 {
 	#region Lift
 
