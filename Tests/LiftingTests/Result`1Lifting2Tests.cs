@@ -1,13 +1,15 @@
 ﻿namespace Tests.LiftingTests;
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 
 using FluentAssertions;
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using SampleTypes.Reference;
 using SampleTypes.Value;
 
 using SoftwareCraft.Functional;
@@ -29,28 +31,16 @@ public class Result1Lifting2Tests
 		lift.IsSuccess.Should().BeTrue();
 	}
 
-	[Fact(DisplayName = "Lifting over the first error returns an error")]
-	public void Test12()
+	[Theory(DisplayName = "Lifting over error results returns an error")]
+	[ClassData(typeof(Result1_Lift2ErrorTestData))]
+	public void Test12(
+		Result<RedDragon, string> r1,
+		Result<RedDragon, string> r2)
 	{
-		var r1 = Result.Error("A");
-		var r2 = Result.Success<string>();
-
 		var lift = Result.Lifting.Lift(r1, r2);
 
 		lift.IsSuccess.Should().BeFalse();
-		lift.OnError(error => error.Should().Be("A"));
-	}
-
-	[Fact(DisplayName = "Lifting over the second error returns an error")]
-	public void Test13()
-	{
-		var r1 = Result.Success<string>();
-		var r2 = Result.Error("B");
-
-		var lift = Result.Lifting.Lift(r1, r2);
-
-		lift.IsSuccess.Should().BeFalse();
-		lift.OnError(error => error.Should().Be("B"));
+		lift.OnError(e => e.Should().Be("error"));
 	}
 
 	#endregion
@@ -68,28 +58,16 @@ public class Result1Lifting2Tests
 		lift.IsSuccess.Should().BeTrue();
 	}
 
-	[Fact(DisplayName = "Lifting async over the first error returns an error")]
-	public async Task Test22()
+	[Theory(DisplayName = "Lifting async over error results returns an error")]
+	[ClassData(typeof(Result1_LiftAsync2ErrorTestData))]
+	public async Task Test22(
+		Task<Result<RedDragon, string>> r1,
+		Task<Result<RedDragon, string>> r2)
 	{
-		var tr1 = Task.FromResult(Result.Error("A"));
-		var tr2 = Task.FromResult(Result.Success<string>());
-
-		var lift = await Result.Lifting.LiftAsync(tr1, tr2);
+		var lift = await Result.Lifting.LiftAsync(r1, r2);
 
 		lift.IsSuccess.Should().BeFalse();
-		lift.OnError(error => error.Should().Be("A"));
-	}
-
-	[Fact(DisplayName = "Lifting async over the second error returns an error")]
-	public async Task Test23()
-	{
-		var tr1 = Task.FromResult(Result.Success<string>());
-		var tr2 = Task.FromResult(Result.Error("B"));
-
-		var lift = await Result.Lifting.LiftAsync(tr1, tr2);
-
-		lift.IsSuccess.Should().BeFalse();
-		lift.OnError(error => error.Should().Be("B"));
+		lift.OnError(e => e.Should().Be("error"));
 	}
 
 	#endregion
@@ -107,28 +85,16 @@ public class Result1Lifting2Tests
 		lift.IsSuccess.Should().BeTrue();
 	}
 
-	[Fact(DisplayName = "Lifting lazy over the first error returns an error")]
-	public void Test32()
+	[Theory(DisplayName = "Lifting lazy over error results returns an error")]
+	[ClassData(typeof(Result1_LiftLazy2ErrorTestData))]
+	public void Test32(
+		Func<Result<RedDragon, string>> r1,
+		Func<Result<RedDragon, string>> r2)
 	{
-		var fr1 = () => Result.Error("A");
-		var fr2 = Result.Success<string>;
-
-		var lift = Result.Lifting.LiftLazy(fr1, fr2);
+		var lift = Result.Lifting.LiftLazy(r1, r2);
 
 		lift.IsSuccess.Should().BeFalse();
-		lift.OnError(error => error.Should().Be("A"));
-	}
-
-	[Fact(DisplayName = "Lifting lazy over the second error returns an error")]
-	public void Test33()
-	{
-		var fr1 = Result.Success<string>;
-		var fr2 = () => Result.Error("B");
-
-		var lift = Result.Lifting.LiftLazy(fr1, fr2);
-
-		lift.IsSuccess.Should().BeFalse();
-		lift.OnError(error => error.Should().Be("B"));
+		lift.OnError(e => e.Should().Be("error"));
 	}
 
 	#endregion
@@ -146,29 +112,97 @@ public class Result1Lifting2Tests
 		lift.IsSuccess.Should().BeTrue();
 	}
 
-	[Fact(DisplayName = "Lifting lazy async over the first error returns an error")]
-	public async Task Test42()
+	[Theory(DisplayName = "Lifting lazy async over error results returns an error")]
+	[ClassData(typeof(Result1_LiftLazyAsync2ErrorTestData))]
+	public async Task Test42(
+		Func<Task<Result<RedDragon, string>>> r1,
+		Func<Task<Result<RedDragon, string>>> r2)
 	{
-		var ftr1 = () => Task.FromResult(Result.Error("A"));
-		var ftr2 = () => Task.FromResult(Result.Success<string>());
-
-		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2);
+		var lift = await Result.Lifting.LiftLazyAsync(r1, r2);
 
 		lift.IsSuccess.Should().BeFalse();
-		lift.OnError(error => error.Should().Be("A"));
-	}
-
-	[Fact(DisplayName = "Lifting lazy async over the second error returns an error")]
-	public async Task Test43()
-	{
-		var ftr1 = () => Task.FromResult(Result.Success<string>());
-		var ftr2 = () => Task.FromResult(Result.Error("B"));
-
-		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2);
-
-		lift.IsSuccess.Should().BeFalse();
-		lift.OnError(error => error.Should().Be("B"));
+		lift.OnError(e => e.Should().Be("error"));
 	}
 
 	#endregion
+}
+
+public class Result1_Lift2ErrorTestData : IEnumerable<object[]>
+{
+	public IEnumerator<object[]> GetEnumerator()
+	{
+		yield return new object[]
+		{
+			Result.Error<RedDragon, string>("error"),
+			Result.Success<RedDragon, string>(new())
+		};
+
+		yield return new object[]
+		{
+			Result.Success<RedDragon, string>(new()),
+			Result.Error<RedDragon, string>("error")
+		};
+	}
+
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+public class Result1_LiftAsync2ErrorTestData : IEnumerable<object[]>
+{
+	public IEnumerator<object[]> GetEnumerator()
+	{
+		yield return new object[]
+		{
+			Task.FromResult(Result.Error<RedDragon, string>("error")),
+			Task.FromResult(Result.Success<RedDragon, string>(new()))
+		};
+
+		yield return new object[]
+		{
+			Task.FromResult(Result.Success<RedDragon, string>(new())),
+			Task.FromResult(Result.Error<RedDragon, string>("error"))
+		};
+	}
+
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+public class Result1_LiftLazy2ErrorTestData : IEnumerable<object[]>
+{
+	public IEnumerator<object[]> GetEnumerator()
+	{
+		yield return new object[]
+		{
+			() => Result.Error<RedDragon, string>("error"),
+			() => Result.Success<RedDragon, string>(new())
+		};
+
+		yield return new object[]
+		{
+			() => Result.Success<RedDragon, string>(new()),
+			() => Result.Error<RedDragon, string>("error")
+		};
+	}
+
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+public class Result1_LiftLazyAsync2ErrorTestData : IEnumerable<object[]>
+{
+	public IEnumerator<object[]> GetEnumerator()
+	{
+		yield return new object[]
+		{
+			() => Task.FromResult(Result.Error<RedDragon, string>("error")),
+			() => Task.FromResult(Result.Success<RedDragon, string>(new()))
+		};
+
+		yield return new object[]
+		{
+			() => Task.FromResult(Result.Success<RedDragon, string>(new())),
+			() => Task.FromResult(Result.Error<RedDragon, string>("error"))
+		};
+	}
+
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

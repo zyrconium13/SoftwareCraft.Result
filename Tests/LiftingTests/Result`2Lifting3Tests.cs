@@ -119,9 +119,9 @@ public class Result2Lifting3Tests
 		lift.IsSuccess.Should().BeTrue();
 	}
 
-	[Theory(DisplayName = "Lifting async over error results returns an error")]
+	[Theory(DisplayName = "Lifting lazy async over error results returns an error")]
 	[ClassData(typeof(Result2_LiftLazyAsync3ErrorTestData))]
-	public async Task Test424(
+	public async Task Test42(
 		Func<Task<Result<RedDragon, string>>> r1,
 		Func<Task<Result<RedDragon, string>>> r2,
 		Func<Task<Result<RedDragon, string>>> r3)
