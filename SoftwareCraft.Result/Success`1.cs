@@ -125,11 +125,7 @@
 
 		public override Result<TError> SelectMany(
 			Func<Result<TError>> mapSuccess)
-		{
-			mapSuccess();
-
-			return new Success<TError>();
-		}
+			=> mapSuccess();
 
 		public override Result<UError> SelectMany<UError>(
 			Func<TError, Result<UError>> mapError)
