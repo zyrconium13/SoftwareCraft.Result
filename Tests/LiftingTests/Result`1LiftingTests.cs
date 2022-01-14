@@ -93,4 +93,43 @@ public class Result1LiftingTests
 	}
 
 	#endregion
+
+	#region LiftLazy
+
+	[Fact(DisplayName = "Lifting lazy over two successes returns success")]
+	public void Test31()
+	{
+		var fr1 = Result.Success<PinkLily>;
+		var fr2 = Result.Success<PinkLily>;
+
+		var lift = Result.Lifting.LiftLazy(fr1, fr2);
+
+		lift.IsSuccess.Should().BeTrue();
+	}
+
+	[Fact(DisplayName = "Lifting lazy over the first error returns an error")]
+	public void Test32()
+	{
+		var fr1 = () => Result.Error("A");
+		var fr2 = Result.Success<string>;
+
+		var lift = Result.Lifting.LiftLazy(fr1, fr2);
+
+		lift.IsSuccess.Should().BeFalse();
+		lift.OnError(error => error.Should().Be("A"));
+	}
+
+	[Fact(DisplayName = "Lifting lazy over the second error returns an error")]
+	public void Test33()
+	{
+		var fr1 = Result.Success<string>;
+		var fr2 = () => Result.Error("B");
+
+		var lift = Result.Lifting.LiftLazy(fr1, fr2);
+
+		lift.IsSuccess.Should().BeFalse();
+		lift.OnError(error => error.Should().Be("B"));
+	}
+
+	#endregion
 }
