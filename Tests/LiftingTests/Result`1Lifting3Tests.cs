@@ -188,8 +188,9 @@ public class Result1Lifting3Tests
 	{
 		var ftr1 = () => Task.FromResult(Result.Success<PinkLily>());
 		var ftr2 = () => Task.FromResult(Result.Success<PinkLily>());
+		var ftr3 = () => Task.FromResult(Result.Success<PinkLily>());
 
-		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2);
+		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2, ftr3);
 
 		lift.IsSuccess.Should().BeTrue();
 	}
@@ -199,8 +200,9 @@ public class Result1Lifting3Tests
 	{
 		var ftr1 = () => Task.FromResult(Result.Error("A"));
 		var ftr2 = () => Task.FromResult(Result.Success<string>());
+		var ftr3 = () => Task.FromResult(Result.Success<string>());
 
-		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2);
+		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2, ftr3);
 
 		lift.IsSuccess.Should().BeFalse();
 		lift.OnError(error => error.Should().Be("A"));
@@ -211,11 +213,25 @@ public class Result1Lifting3Tests
 	{
 		var ftr1 = () => Task.FromResult(Result.Success<string>());
 		var ftr2 = () => Task.FromResult(Result.Error("B"));
+		var ftr3 = () => Task.FromResult(Result.Success<string>());
 
-		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2);
+		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2, ftr3);
 
 		lift.IsSuccess.Should().BeFalse();
 		lift.OnError(error => error.Should().Be("B"));
+	}
+
+	[Fact(DisplayName = "Lifting lazy async over the third error returns an error")]
+	public async Task Test44()
+	{
+		var ftr1 = () => Task.FromResult(Result.Success<string>());
+		var ftr2 = () => Task.FromResult(Result.Success<string>());
+		var ftr3 = () => Task.FromResult(Result.Error("C"));
+
+		var lift = await Result.Lifting.LiftLazyAsync(ftr1, ftr2, ftr3);
+
+		lift.IsSuccess.Should().BeFalse();
+		lift.OnError(error => error.Should().Be("C"));
 	}
 
 	#endregion
