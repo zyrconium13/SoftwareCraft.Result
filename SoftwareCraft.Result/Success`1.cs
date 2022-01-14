@@ -145,13 +145,9 @@
 			Func<TError, Task<Result<UError>>> mapError)
 			=> mapSuccess();
 
-		public override async Task<Result<TError>> SelectManyAsync(
-			Func<Task<Result<TError>>> mapSuccess)
-		{
-			await mapSuccess();
-
-			return new Success<TError>();
-		}
+		public override  Task<Result<TError>> SelectManyAsync(
+			Func<Task<Result<TError>>> mapSuccess) 
+			=> mapSuccess();
 
 		public override Task<Result<UError>> SelectManyAsync<UError>(
 			Func<TError, Task<Result<UError>>> mapError)

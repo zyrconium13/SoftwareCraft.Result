@@ -38,8 +38,8 @@ public static class Result
 			Task<Result<TError>> r2
 		)
 			=> await (await r1).SelectManyAsync(
-				async _ => (await r2).SelectMany(
-					_ => Success<TError>()));
+				async () => (await r2).SelectMany(
+					Success<TError>));
 
 		#endregion
 
