@@ -10,7 +10,7 @@ namespace Tests
 	using SoftwareCraft.Functional;
 
 	[TestClass]
-	public class Error2Tests
+	public class DefaultValueTests
 	{
 		[TestMethod]
 		public void CannotAssignDefaultValueToReferenceTypes()
