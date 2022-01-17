@@ -1,15 +1,16 @@
-﻿namespace SoftwareCraft.Functional
+﻿namespace SoftwareCraft.Functional;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public static class Extensions
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	public static Result<TSuccess, TError> AsSuccess<TSuccess, TError>(this TSuccess @this) =>
+		Result.Success<TSuccess, TError>(@this);
 
-	public static class Extensions
-	{
-		public static Result<T, string> AsSuccess<T>(this T      @this) => Result.Success<T, string>(@this);
-		public static Result<T, string> AsError<T>(this   string @this) => Result.Error<T, string>(@this);
+	public static Result<TSuccess, TError> AsError<TSuccess, TError>(this TError @this) =>
+		Result.Error<TSuccess, TError>(@this);
 
-		public static Result<string> AsSuccess(this object _)     => Result.Success<string>();
-		public static Result<string> AsError(this   string @this) => Result.Error(@this);
-	}
+	public static Result<TError> AsError<TError>(this TError @this) => Result.Error(@this);
 }
