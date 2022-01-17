@@ -14,6 +14,8 @@ using SampleTypes.Value;
 
 using SoftwareCraft.Functional;
 
+using TestData;
+
 using Xunit;
 
 public class Result2Lifting2Tests
@@ -129,19 +131,15 @@ public class Result2Lifting2Tests
 
 public class Result2_Lift2ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result2_Lift2ErrorTestData()
+		=> g = Result2TestDataGenerator.AsResults();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			Result.Error<RedDragon, string>("error"),
-			Result.Success<RedDragon, string>(new())
-		};
-
-		yield return new object[]
-		{
-			Result.Success<RedDragon, string>(new()),
-			Result.Error<RedDragon, string>("error")
-		};
+		yield return g.Generate(2, 0);
+		yield return g.Generate(2, 1);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -149,19 +147,15 @@ public class Result2_Lift2ErrorTestData : IEnumerable<object[]>
 
 public class Result2_LiftLazy2ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result2_LiftLazy2ErrorTestData()
+		=> g = Result2TestDataGenerator.AsFunctions();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			() => Result.Error<RedDragon, string>("error"),
-			() => Result.Success<RedDragon, string>(new())
-		};
-
-		yield return new object[]
-		{
-			() => Result.Success<RedDragon, string>(new()),
-			() => Result.Error<RedDragon, string>("error")
-		};
+		yield return g.Generate(2, 0);
+		yield return g.Generate(2, 1);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -169,19 +163,15 @@ public class Result2_LiftLazy2ErrorTestData : IEnumerable<object[]>
 
 public class Result2_LiftAsync2ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result2_LiftAsync2ErrorTestData()
+		=> g = Result2TestDataGenerator.AsTasks();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			Task.FromResult(Result.Error<RedDragon, string>("error")),
-			Task.FromResult(Result.Success<RedDragon, string>(new()))
-		};
-
-		yield return new object[]
-		{
-			Task.FromResult(Result.Success<RedDragon, string>(new())),
-			Task.FromResult(Result.Error<RedDragon, string>("error"))
-		};
+		yield return g.Generate(2, 0);
+		yield return g.Generate(2, 1);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -189,19 +179,15 @@ public class Result2_LiftAsync2ErrorTestData : IEnumerable<object[]>
 
 public class Result2_LiftLazyAsync2ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result2_LiftLazyAsync2ErrorTestData()
+		=> g = Result2TestDataGenerator.AsFunctionTasks();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			() => Task.FromResult(Result.Error<RedDragon, string>("error")),
-			() => Task.FromResult(Result.Success<RedDragon, string>(new()))
-		};
-
-		yield return new object[]
-		{
-			() => Task.FromResult(Result.Success<RedDragon, string>(new())),
-			() => Task.FromResult(Result.Error<RedDragon, string>("error"))
-		};
+		yield return g.Generate(2, 0);
+		yield return g.Generate(2, 1);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

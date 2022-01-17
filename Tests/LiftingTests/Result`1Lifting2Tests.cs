@@ -13,6 +13,8 @@ using SampleTypes.Value;
 
 using SoftwareCraft.Functional;
 
+using TestData;
+
 using Xunit;
 
 public class Result1Lifting2Tests
@@ -128,19 +130,15 @@ public class Result1Lifting2Tests
 
 public class Result1_Lift2ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result1_Lift2ErrorTestData()
+		=> g = Result1TestDataGenerator.AsResults();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			Result.Error("error"),
-			Result.Success<string>()
-		};
-
-		yield return new object[]
-		{
-			Result.Success<string>(),
-			Result.Error("error")
-		};
+		yield return g.Generate(2, 0);
+		yield return g.Generate(2, 1);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -148,19 +146,15 @@ public class Result1_Lift2ErrorTestData : IEnumerable<object[]>
 
 public class Result1_LiftAsync2ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result1_LiftAsync2ErrorTestData()
+		=> g = Result1TestDataGenerator.AsTasks();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			Task.FromResult(Result.Error("error")),
-			Task.FromResult(Result.Success<string>())
-		};
-
-		yield return new object[]
-		{
-			Task.FromResult(Result.Success<string>()),
-			Task.FromResult(Result.Error("error"))
-		};
+		yield return g.Generate(2, 0);
+		yield return g.Generate(2, 1);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -168,19 +162,15 @@ public class Result1_LiftAsync2ErrorTestData : IEnumerable<object[]>
 
 public class Result1_LiftLazy2ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result1_LiftLazy2ErrorTestData()
+		=> g = Result1TestDataGenerator.AsFunctions();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			() => Result.Error("error"),
-			() => Result.Success<string>()
-		};
-
-		yield return new object[]
-		{
-			() => Result.Success<string>(),
-			() => Result.Error("error")
-		};
+		yield return g.Generate(2, 0);
+		yield return g.Generate(2, 1);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -188,19 +178,15 @@ public class Result1_LiftLazy2ErrorTestData : IEnumerable<object[]>
 
 public class Result1_LiftLazyAsync2ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result1_LiftLazyAsync2ErrorTestData()
+		=> g = Result1TestDataGenerator.AsFunctionTasks();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			() => Task.FromResult(Result.Error("error")),
-			() => Task.FromResult(Result.Success<string>())
-		};
-
-		yield return new object[]
-		{
-			() => Task.FromResult(Result.Success<string>()),
-			() => Task.FromResult(Result.Error("error"))
-		};
+		yield return g.Generate(2, 0);
+		yield return g.Generate(2, 1);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

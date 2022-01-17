@@ -13,6 +13,8 @@ using SampleTypes.Value;
 
 using SoftwareCraft.Functional;
 
+using TestData;
+
 using Xunit;
 
 public class Result1Lifting3Tests
@@ -136,28 +138,16 @@ public class Result1Lifting3Tests
 
 public class Result1_Lift3ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result1_Lift3ErrorTestData()
+		=> g = Result1TestDataGenerator.AsResults();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			Result.Error("error"),
-			Result.Success<string>(),
-			Result.Success<string>()
-		};
-
-		yield return new object[]
-		{
-			Result.Success<string>(),
-			Result.Error("error"),
-			Result.Success<string>()
-		};
-
-		yield return new object[]
-		{
-			Result.Success<string>(),
-			Result.Success<string>(),
-			Result.Error("error")
-		};
+		yield return g.Generate(3, 0);
+		yield return g.Generate(3, 1);
+		yield return g.Generate(3, 2);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -165,28 +155,16 @@ public class Result1_Lift3ErrorTestData : IEnumerable<object[]>
 
 public class Result1_LiftAsync3ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result1_LiftAsync3ErrorTestData()
+		=> g = Result1TestDataGenerator.AsTasks();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			Task.FromResult(Result.Error("error")),
-			Task.FromResult(Result.Success<string>()),
-			Task.FromResult(Result.Success<string>())
-		};
-
-		yield return new object[]
-		{
-			Task.FromResult(Result.Success<string>()),
-			Task.FromResult(Result.Error("error")),
-			Task.FromResult(Result.Success<string>())
-		};
-
-		yield return new object[]
-		{
-			Task.FromResult(Result.Success<string>()),
-			Task.FromResult(Result.Success<string>()),
-			Task.FromResult(Result.Error("error"))
-		};
+		yield return g.Generate(3, 0);
+		yield return g.Generate(3, 1);
+		yield return g.Generate(3, 2);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -194,28 +172,16 @@ public class Result1_LiftAsync3ErrorTestData : IEnumerable<object[]>
 
 public class Result1_LiftLazy3ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result1_LiftLazy3ErrorTestData()
+		=> g = Result1TestDataGenerator.AsFunctions();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			() => Result.Error("error"),
-			() => Result.Success<string>(),
-			() => Result.Success<string>()
-		};
-
-		yield return new object[]
-		{
-			() => Result.Success<string>(),
-			() => Result.Error("error"),
-			() => Result.Success<string>()
-		};
-
-		yield return new object[]
-		{
-			() => Result.Success<string>(),
-			() => Result.Success<string>(),
-			() => Result.Error("error")
-		};
+		yield return g.Generate(3, 0);
+		yield return g.Generate(3, 1);
+		yield return g.Generate(3, 2);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -223,28 +189,16 @@ public class Result1_LiftLazy3ErrorTestData : IEnumerable<object[]>
 
 public class Result1_LiftLazyAsync3ErrorTestData : IEnumerable<object[]>
 {
+	private readonly IGenerator g;
+
+	public Result1_LiftLazyAsync3ErrorTestData()
+		=> g = Result1TestDataGenerator.AsFunctionTasks();
+
 	public IEnumerator<object[]> GetEnumerator()
 	{
-		yield return new object[]
-		{
-			() => Task.FromResult(Result.Error("error")),
-			() => Task.FromResult(Result.Success<string>()),
-			() => Task.FromResult(Result.Success<string>())
-		};
-
-		yield return new object[]
-		{
-			() => Task.FromResult(Result.Success<string>()),
-			() => Task.FromResult(Result.Error("error")),
-			() => Task.FromResult(Result.Success<string>())
-		};
-
-		yield return new object[]
-		{
-			() => Task.FromResult(Result.Success<string>()),
-			() => Task.FromResult(Result.Success<string>()),
-			() => Task.FromResult(Result.Error("error"))
-		};
+		yield return g.Generate(3, 0);
+		yield return g.Generate(3, 1);
+		yield return g.Generate(3, 2);
 	}
 
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
