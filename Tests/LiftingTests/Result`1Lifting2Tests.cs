@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using SampleTypes.Reference;
 using SampleTypes.Value;
 
 using SoftwareCraft.Functional;
@@ -34,8 +33,8 @@ public class Result1Lifting2Tests
 	[Theory(DisplayName = "Lifting over error results returns an error")]
 	[ClassData(typeof(Result1_Lift2ErrorTestData))]
 	public void Test12(
-		Result<RedDragon, string> r1,
-		Result<RedDragon, string> r2)
+		Result<string> r1,
+		Result<string> r2)
 	{
 		var lift = Result.Lifting.Lift(r1, r2);
 
@@ -61,8 +60,8 @@ public class Result1Lifting2Tests
 	[Theory(DisplayName = "Lifting async over error results returns an error")]
 	[ClassData(typeof(Result1_LiftAsync2ErrorTestData))]
 	public async Task Test22(
-		Task<Result<RedDragon, string>> r1,
-		Task<Result<RedDragon, string>> r2)
+		Task<Result<string>> r1,
+		Task<Result<string>> r2)
 	{
 		var lift = await Result.Lifting.LiftAsync(r1, r2);
 
@@ -88,8 +87,8 @@ public class Result1Lifting2Tests
 	[Theory(DisplayName = "Lifting lazy over error results returns an error")]
 	[ClassData(typeof(Result1_LiftLazy2ErrorTestData))]
 	public void Test32(
-		Func<Result<RedDragon, string>> r1,
-		Func<Result<RedDragon, string>> r2)
+		Func<Result<string>> r1,
+		Func<Result<string>> r2)
 	{
 		var lift = Result.Lifting.LiftLazy(r1, r2);
 
@@ -115,8 +114,8 @@ public class Result1Lifting2Tests
 	[Theory(DisplayName = "Lifting lazy async over error results returns an error")]
 	[ClassData(typeof(Result1_LiftLazyAsync2ErrorTestData))]
 	public async Task Test42(
-		Func<Task<Result<RedDragon, string>>> r1,
-		Func<Task<Result<RedDragon, string>>> r2)
+		Func<Task<Result<string>>> r1,
+		Func<Task<Result<string>>> r2)
 	{
 		var lift = await Result.Lifting.LiftLazyAsync(r1, r2);
 
@@ -133,14 +132,14 @@ public class Result1_Lift2ErrorTestData : IEnumerable<object[]>
 	{
 		yield return new object[]
 		{
-			Result.Error<RedDragon, string>("error"),
-			Result.Success<RedDragon, string>(new())
+			Result.Error("error"),
+			Result.Success<string>()
 		};
 
 		yield return new object[]
 		{
-			Result.Success<RedDragon, string>(new()),
-			Result.Error<RedDragon, string>("error")
+			Result.Success<string>(),
+			Result.Error("error")
 		};
 	}
 
@@ -153,14 +152,14 @@ public class Result1_LiftAsync2ErrorTestData : IEnumerable<object[]>
 	{
 		yield return new object[]
 		{
-			Task.FromResult(Result.Error<RedDragon, string>("error")),
-			Task.FromResult(Result.Success<RedDragon, string>(new()))
+			Task.FromResult(Result.Error("error")),
+			Task.FromResult(Result.Success<string>())
 		};
 
 		yield return new object[]
 		{
-			Task.FromResult(Result.Success<RedDragon, string>(new())),
-			Task.FromResult(Result.Error<RedDragon, string>("error"))
+			Task.FromResult(Result.Success<string>()),
+			Task.FromResult(Result.Error("error"))
 		};
 	}
 
@@ -173,14 +172,14 @@ public class Result1_LiftLazy2ErrorTestData : IEnumerable<object[]>
 	{
 		yield return new object[]
 		{
-			() => Result.Error<RedDragon, string>("error"),
-			() => Result.Success<RedDragon, string>(new())
+			() => Result.Error("error"),
+			() => Result.Success<string>()
 		};
 
 		yield return new object[]
 		{
-			() => Result.Success<RedDragon, string>(new()),
-			() => Result.Error<RedDragon, string>("error")
+			() => Result.Success<string>(),
+			() => Result.Error("error")
 		};
 	}
 
@@ -193,14 +192,14 @@ public class Result1_LiftLazyAsync2ErrorTestData : IEnumerable<object[]>
 	{
 		yield return new object[]
 		{
-			() => Task.FromResult(Result.Error<RedDragon, string>("error")),
-			() => Task.FromResult(Result.Success<RedDragon, string>(new()))
+			() => Task.FromResult(Result.Error("error")),
+			() => Task.FromResult(Result.Success<string>())
 		};
 
 		yield return new object[]
 		{
-			() => Task.FromResult(Result.Success<RedDragon, string>(new())),
-			() => Task.FromResult(Result.Error<RedDragon, string>("error"))
+			() => Task.FromResult(Result.Success<string>()),
+			() => Task.FromResult(Result.Error("error"))
 		};
 	}
 
