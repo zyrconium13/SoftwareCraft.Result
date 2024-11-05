@@ -19,6 +19,9 @@
 				throw new InvalidOperationException();
 		}
 
+        public static implicit operator Result<TError>(Unit _) => Result.Success<TError>();
+        public static implicit operator Result<TError>(TError error) => Result.Error(error);
+
 		#region On
 
 		public virtual Result<TError> OnSuccess(Action onSuccess) => this;
