@@ -140,4 +140,32 @@ public static class TaskExtensions
     => await (await @this).SelectSwitchManyAsync(mapError);
 
   #endregion
+
+  #region Match
+
+  public static async Task Match<TValue, TError>(
+    this Task<Result<TValue, TError>> @this,
+    Action<TValue>                    matchValue,
+    Action<TError>                    matchError)
+    => (await @this).Match(matchValue, matchError);
+
+  public static async Task<TOut> Match<TValue, TError, TOut>(
+    this Task<Result<TValue, TError>> @this,
+    Func<TValue, TOut>                matchValue,
+    Func<TError, TOut>                matchError)
+    => (await @this).Match(matchValue, matchError);
+
+  public static async Task MatchAsync<TValue, TError>(
+    this Task<Result<TValue, TError>> @this,
+    Func<TValue, Task>                matchValue,
+    Func<TError, Task>                matchError)
+    => await (await @this).MatchAsync(matchValue, matchError);
+
+  public static async Task<TOut> MatchAsync<TValue, TError, TOut>(
+    this Task<Result<TValue, TError>> @this,
+    Func<TValue, Task<TOut>>          matchValue,
+    Func<TError, Task<TOut>>          matchError)
+    => await (await @this).MatchAsync(matchValue, matchError);
+
+  #endregion
 }
