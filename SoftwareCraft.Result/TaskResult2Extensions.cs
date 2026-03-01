@@ -3,7 +3,7 @@ namespace SoftwareCraft.Functional;
 using System;
 using System.Threading.Tasks;
 
-public static class TaskExtensions
+public static class TaskResult2Extensions
 {
   #region Select
 
