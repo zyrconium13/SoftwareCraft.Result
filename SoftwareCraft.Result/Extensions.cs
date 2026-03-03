@@ -2,6 +2,9 @@
 
 public static class Extensions
 {
+  public static Result<TError> AsSuccess<TError>(this Unit _) =>
+    Result.Success<TError>();
+
   public static Result<TSuccess, TError> AsSuccess<TSuccess, TError>(this TSuccess @this) =>
     Result.Success<TSuccess, TError>(@this);
 
