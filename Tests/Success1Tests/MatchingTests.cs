@@ -1,46 +1,40 @@
-﻿namespace Tests.Success1Tests
+﻿namespace Tests.Success1Tests;
+
+using SampleTypes.Reference;
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public class MatchingTests
 {
-	using System;
-	using System.Linq;
+  [Fact]
+  public void ActionMatchingOverloadInvokesTheSuccessBranch()
+  {
+    var result = Result.Success<string>();
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+    var spy = new Spy();
 
-	using SampleTypes.Reference;
+    result.Match(
+      () => { spy.Trip(); },
+      e => { spy.Trip(e); }
+    );
 
-	using SoftwareCraft.Functional;
+    spy.VerifyTrip(1);
+  }
 
-	[TestClass]
-	public class MatchingTests
-	{
-		[TestMethod]
-		public void ActionMatchingOverloadInvokesTheSuccessBranch()
-		{
-			var result = Result.Success<string>();
+  [Fact]
+  public void FunctionMatchingOverloadInvokesTheSuccessBranch()
+  {
+    var successDummy = new RedDragon();
+    var errorDummy   = new RedDragon();
 
-			var spy = new Spy();
+    var result = Result.Success<string>();
 
-			result.Match(
-				() => { spy.Trip(); },
-				e => { spy.Trip(e); }
-			);
+    var matchResult = result.Match(
+      () => successDummy,
+      e => errorDummy);
 
-			spy.VerifyTrip(1);
-		}
-
-		[TestMethod]
-		public void FunctionMatchingOverloadInvokesTheSuccessBranch()
-		{
-			var successDummy = new RedDragon();
-			var errorDummy = new RedDragon();
-
-			var result = Result.Success<string>();
-
-			var matchResult = result.Match(
-				() => successDummy,
-				e => errorDummy);
-
-			Assert.AreSame(successDummy, matchResult);
-			Assert.AreNotSame(errorDummy, matchResult);
-		}
-	}
+    matchResult.ShouldBeSameAs(successDummy);
+    matchResult.ShouldNotBeSameAs(errorDummy);
+  }
 }

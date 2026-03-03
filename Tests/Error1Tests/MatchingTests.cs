@@ -1,48 +1,42 @@
-﻿namespace Tests.Error1Tests
+﻿namespace Tests.Error1Tests;
+
+using SampleTypes.Value;
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public class MatchingTests
 {
-	using System;
-	using System.Linq;
+  [Fact]
+  public void ActionMatchingOverloadInvokesTheErrorBranchWithTheProvidedErrorValue()
+  {
+    var result = Result.Error(new PinkLily());
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+    var spy = new Spy();
 
-	using SampleTypes.Value;
+    var matchValue = new VioletIris();
+    var matchError = new VioletIris();
 
-	using SoftwareCraft.Functional;
+    result.Match(
+      () => { spy.Trip(matchValue); },
+      e => { spy.Trip(matchError); }
+    );
 
-	[TestClass]
-	public class MatchingTests
-	{
-		[TestMethod]
-		public void ActionMatchingOverloadInvokesTheErrorBranchWithTheProvidedErrorValue()
-		{
-			var result = Result.Error(new PinkLily());
+    spy.VerifyTrip(1, matchError);
+  }
 
-			var spy = new Spy();
+  [Fact]
+  public void FunctionMatchingOverloadInvokesTheErrorBranchWithTheProvidedErrorValue()
+  {
+    var result = Result.Error(new PinkLily());
 
-			var matchValue = new VioletIris();
-			var matchError = new VioletIris();
+    var matchValue = new VioletIris();
+    var matchError = new VioletIris();
 
-			result.Match(
-				() => { spy.Trip(matchValue); },
-				e => { spy.Trip(matchError); }
-			);
+    var matchResult = result.Match(
+      () => matchValue,
+      e => matchError);
 
-			spy.VerifyTrip(1, matchError);
-		}
-
-		[TestMethod]
-		public void FunctionMatchingOverloadInvokesTheErrorBranchWithTheProvidedErrorValue()
-		{
-			var result = Result.Error(new PinkLily());
-
-			var matchValue = new VioletIris();
-			var matchError = new VioletIris();
-
-			var matchResult = result.Match(
-				() => matchValue,
-				e => matchError);
-
-			Assert.AreEqual(matchError, matchResult);
-		}
-	}
+    matchResult.ShouldBe(matchError);
+  }
 }

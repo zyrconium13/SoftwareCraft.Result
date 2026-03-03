@@ -1,196 +1,183 @@
-﻿namespace Tests.Success2Tests
+﻿namespace Tests.Success2Tests;
+
+using System;
+using System.Threading.Tasks;
+using SampleTypes.Reference;
+using SampleTypes.Value;
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public sealed class SwitchingTests
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
+  private readonly Result<RedDragon, PinkLily> fail;
+  private readonly PinkLily                    failValue;
 
-	using SampleTypes.Reference;
-	using SampleTypes.Value;
+  private readonly Spy spy;
 
-	using SoftwareCraft.Functional;
+  private readonly Result<RedDragon, PinkLily> success;
+  private readonly RedDragon                   successValue;
 
-	using Xunit;
+  public SwitchingTests()
+  {
+    successValue = new RedDragon();
+    failValue    = new PinkLily();
 
-	public sealed class SwitchingTests
-	{
-		private readonly Result<RedDragon, PinkLily> fail;
-		private readonly PinkLily                    failValue;
+    success = Result.Success<RedDragon, PinkLily>(successValue);
+    fail    = Result.Error<RedDragon, PinkLily>(failValue);
 
-		private readonly Spy spy;
+    spy = new Spy();
+  }
 
-		private readonly Result<RedDragon, PinkLily> success;
-		private readonly RedDragon                   successValue;
+  [Fact(DisplayName = "Success`2 select switch both methods")]
+  public void Fact1()
+  {
+    success.SelectSwitch<PinkLily>(
+      v => { spy.Trip(v); },
+      e => throw new Exception()).ShouldBeOfType<Success<PinkLily>>();
 
-		public SwitchingTests()
-		{
-			successValue = new();
-			failValue    = new();
+    spy.VerifyTrip(1, successValue);
+  }
 
-			success = Result.Success<RedDragon, PinkLily>(successValue);
-			fail    = Result.Error<RedDragon, PinkLily>(failValue);
+  [Fact(DisplayName = "Success`2 select switch map value only")]
+  public void Fact2()
+  {
+    success.SelectSwitch(v => { spy.Trip(v); }).ShouldBeOfType<Success<PinkLily>>();
 
-			spy = new();
-		}
+    spy.VerifyTrip(1, successValue);
+  }
 
-		[Fact(DisplayName = "Success`2 select switch both methods")]
-		public void Fact1()
-		{
-			var _ = (Success<PinkLily>)success.SelectSwitch<PinkLily>(
-				v => { spy.Trip(v); },
-				e => throw new());
+  [Fact(DisplayName = "Success`2 select switch map error only (never get called)")]
+  public void Fact3()
+  {
+    success.SelectSwitch(e =>
+                                                    {
+                                                      spy.Trip();
 
-			spy.VerifyTrip(1, successValue);
-		}
+                                                      return e;
+                                                    }).ShouldBeOfType<Success<PinkLily>>();
 
-		[Fact(DisplayName = "Success`2 select switch map value only")]
-		public void Fact2()
-		{
-			var _ = (Success<PinkLily>)success.SelectSwitch(
-				v => { spy.Trip(v); });
+    spy.VerifyTrip(0);
+  }
 
-			spy.VerifyTrip(1, successValue);
-		}
+  [Fact(DisplayName = "Error`2 select switch both methods")]
+  public void Fact4()
+  {
+    fail.SelectSwitch(
+      v => throw new Exception(),
+      e =>
+      {
+        spy.Trip(e);
 
-		[Fact(DisplayName = "Success`2 select switch map error only (never get called)")]
-		public void Fact3()
-		{
-			var _ = (Success<PinkLily>)success.SelectSwitch(
-				e =>
-				{
-					spy.Trip();
+        return e;
+      }).ShouldBeOfType<Error<PinkLily>>();
 
-					return e;
-				});
+    spy.VerifyTrip(1, failValue);
+  }
 
-			spy.VerifyTrip(0);
-		}
+  [Fact(DisplayName = "Error`2 select switch map value only (never gets called)")]
+  public void Fact5()
+  {
+    fail.SelectSwitch(v =>
+                                               {
+                                                 spy.Trip(v);
 
-		[Fact(DisplayName = "Error`2 select switch both methods")]
-		public void Fact4()
-		{
-			var _ = (Error<PinkLily>)fail.SelectSwitch(
-				v => throw new(),
-				e =>
-				{
-					spy.Trip(e);
+                                                 throw new Exception();
+                                               }).ShouldBeOfType<Error<PinkLily>>();
 
-					return e;
-				});
+    spy.VerifyTrip(0);
+  }
 
-			spy.VerifyTrip(1, failValue);
-		}
+  [Fact(DisplayName = "Error`2 select switch map error only")]
+  public void Fact6()
+  {
+    fail.SelectSwitch(e =>
+                                               {
+                                                 spy.Trip(e);
 
-		[Fact(DisplayName = "Error`2 select switch map value only (never gets called)")]
-		public void Fact5()
-		{
-			var _ = (Error<PinkLily>)fail.SelectSwitch(
-				v =>
-				{
-					spy.Trip(v);
+                                                 return e;
+                                               }).ShouldBeOfType<Error<PinkLily>>();
 
-					throw new();
-				});
+    spy.VerifyTrip(1, failValue);
+  }
 
-			spy.VerifyTrip(0);
-		}
+  [Fact(DisplayName = "Success`2 select switch async both methods")]
+  public async Task Fact7()
+  {
+    (await success.SelectSwitchAsync<PinkLily>(
+                                 v =>
+                                 {
+                                   spy.Trip(v);
+                                   return Task.CompletedTask;
+                                 },
+                                 e => throw new Exception())).ShouldBeOfType<Success<PinkLily>>();
 
-		[Fact(DisplayName = "Error`2 select switch map error only")]
-		public void Fact6()
-		{
-			var _ = (Error<PinkLily>)fail.SelectSwitch(
-				e =>
-				{
-					spy.Trip(e);
+    spy.VerifyTrip(1, successValue);
+  }
 
-					return e;
-				});
+  [Fact(DisplayName = "Success`2 select switch async map value only")]
+  public async Task Fact8()
+  {
+    (await success.SelectSwitchAsync(v =>
+                                                               {
+                                                                 spy.Trip(v);
+                                                                 return Task.CompletedTask;
+                                                               })).ShouldBeOfType<Success<PinkLily>>();
 
-			spy.VerifyTrip(1, failValue);
-		}
+    spy.VerifyTrip(1, successValue);
+  }
 
-		[Fact(DisplayName = "Success`2 select switch async both methods")]
-		public async Task Fact7()
-		{
-			var _ = (Success<PinkLily>)await success.SelectSwitchAsync<PinkLily>(
-				v =>
-				{
-					spy.Trip(v);
-					return Task.CompletedTask;
-				},
-				e => throw new());
+  [Fact(DisplayName = "Success`2 select switch async map error only (never get called)")]
+  public async Task Fact9()
+  {
+    (await success.SelectSwitchAsync(e =>
+                                                               {
+                                                                 spy.Trip(e);
 
-			spy.VerifyTrip(1, successValue);
-		}
+                                                                 return Task.FromResult(e);
+                                                               })).ShouldBeOfType<Success<PinkLily>>();
 
-		[Fact(DisplayName = "Success`2 select switch async map value only")]
-		public async Task Fact8()
-		{
-			var _ = (Success<PinkLily>)await success.SelectSwitchAsync(
-				v =>
-				{
-					spy.Trip(v);
-					return Task.CompletedTask;
-				});
+    spy.VerifyTrip(0);
+  }
 
-			spy.VerifyTrip(1, successValue);
-		}
+  [Fact(DisplayName = "Error`2 select switch async both methods")]
+  public async Task Fact10()
+  {
+    (await fail.SelectSwitchAsync(
+                               v => throw new Exception(),
+                               e =>
+                               {
+                                 spy.Trip(e);
 
-		[Fact(DisplayName = "Success`2 select switch async map error only (never get called)")]
-		public async Task Fact9()
-		{
-			var _ = (Success<PinkLily>)await success.SelectSwitchAsync(
-				e =>
-				{
-					spy.Trip(e);
+                                 return Task.FromResult(e);
+                               })).ShouldBeOfType<Error<PinkLily>>();
 
-					return Task.FromResult(e);
-				});
+    spy.VerifyTrip(1, failValue);
+  }
 
-			spy.VerifyTrip(0);
-		}
+  [Fact(DisplayName = "Error`2 select switch async map value only (never gets called)")]
+  public async Task Fact11()
+  {
+    (await fail.SelectSwitchAsync(v =>
+                                                          {
+                                                            spy.Trip(v);
 
-		[Fact(DisplayName = "Error`2 select switch async both methods")]
-		public async Task Fact10()
-		{
-			var _ = (Error<PinkLily>)await fail.SelectSwitchAsync(
-				v => throw new(),
-				e =>
-				{
-					spy.Trip(e);
+                                                            throw new Exception();
+                                                          })).ShouldBeOfType<Error<PinkLily>>();
 
-					return Task.FromResult(e);
-				});
+    spy.VerifyTrip(0);
+  }
 
-			spy.VerifyTrip(1, failValue);
-		}
+  [Fact(DisplayName = "Error`2 select switch map error only")]
+  public async Task Fact12()
+  {
+    (await fail.SelectSwitchAsync(e =>
+                                                          {
+                                                            spy.Trip(e);
 
-		[Fact(DisplayName = "Error`2 select switch async map value only (never gets called)")]
-		public async Task Fact11()
-		{
-			var _ = (Error<PinkLily>)await fail.SelectSwitchAsync(
-				v =>
-				{
-					spy.Trip(v);
+                                                            return Task.FromResult(e);
+                                                          })).ShouldBeOfType<Error<PinkLily>>();
 
-					throw new();
-				});
-
-			spy.VerifyTrip(0);
-		}
-
-		[Fact(DisplayName = "Error`2 select switch map error only")]
-		public async Task Fact12()
-		{
-			var _ = (Error<PinkLily>)await fail.SelectSwitchAsync(
-				e =>
-				{
-					spy.Trip(e);
-
-					return Task.FromResult(e);
-				});
-
-			spy.VerifyTrip(1, failValue);
-		}
-	}
+    spy.VerifyTrip(1, failValue);
+  }
 }

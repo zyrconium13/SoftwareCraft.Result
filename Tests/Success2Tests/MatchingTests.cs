@@ -1,49 +1,43 @@
-﻿namespace Tests.Success2Tests
+﻿namespace Tests.Success2Tests;
+
+using SampleTypes.Reference;
+using SampleTypes.Value;
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public class MatchingTests
 {
-	using System;
-	using System.Linq;
+  [Fact]
+  public void ActionMatchingOverloadInvokesTheSuccessBranch()
+  {
+    var value = new RedDragon();
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+    var result = Result.Success<RedDragon, string>(value);
 
-	using SampleTypes.Reference;
-	using SampleTypes.Value;
+    var spy = new Spy();
 
-	using SoftwareCraft.Functional;
+    result.Match(
+      v => { spy.Trip(v); },
+      e => { spy.Trip(e); }
+    );
 
-	[TestClass]
-	public class MatchingTests
-	{
-		[TestMethod]
-		public void ActionMatchingOverloadInvokesTheSuccessBranch()
-		{
-			var value = new RedDragon();
+    spy.VerifyTrip(1, value);
+  }
 
-			var result = Result.Success<RedDragon, string>(value);
+  [Fact]
+  public void FunctionMatchingOverloadInvokesTheSuccessBranch()
+  {
+    var successDummy = new VioletIris();
+    var errorDummy   = new VioletIris();
 
-			var spy = new Spy();
+    var result = Result.Success<RedDragon, string>(new RedDragon());
 
-			result.Match(
-				v => { spy.Trip(v); },
-				e => { spy.Trip(e); }
-			);
+    var matchResult = result.Match(
+      v => successDummy,
+      e => errorDummy);
 
-			spy.VerifyTrip(1, value);
-		}
-
-		[TestMethod]
-		public void FunctionMatchingOverloadInvokesTheSuccessBranch()
-		{
-			var successDummy = new VioletIris();
-			var errorDummy = new VioletIris();
-
-			var result = Result.Success<RedDragon, string>(new RedDragon());
-
-			var matchResult = result.Match(
-				v => successDummy,
-				e => errorDummy);
-
-			Assert.AreEqual(successDummy, matchResult);
-			Assert.AreNotSame(errorDummy, matchResult);
-		}
-	}
+    matchResult.ShouldBe(successDummy);
+    matchResult.ShouldNotBeSameAs(errorDummy);
+  }
 }

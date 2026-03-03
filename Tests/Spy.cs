@@ -1,47 +1,43 @@
-﻿namespace Tests
+﻿namespace Tests;
+
+using Shouldly;
+
+public class Spy
 {
-	using System;
-	using System.Linq;
+  private int timesTripped;
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+  private object value;
 
-	public class Spy
-	{
-		private int timesTripped;
+  public void Trip()
+  {
+    timesTripped++;
+  }
 
-		private object value;
+  public void Trip(object expectedValue)
+  {
+    timesTripped++;
+    value = expectedValue;
+  }
 
-		public void Trip()
-		{
-			timesTripped++;
-		}
+  public void VerifyTrip(int times)
+  {
+    CheckTimesTripped(times);
+  }
 
-		public void Trip(object expectedValue)
-		{
-			timesTripped++;
-			value = expectedValue;
-		}
+  public void VerifyTrip(int times, object expectedValue)
+  {
+    CheckTimesTripped(times);
 
-		public void VerifyTrip(int times)
-		{
-			CheckTimesTripped(times);
-		}
+    CheckTrippedValue(expectedValue);
+  }
 
-		public void VerifyTrip(int times, object expectedValue)
-		{
-			CheckTimesTripped(times);
+  private void CheckTimesTripped(int times)
+  {
+    timesTripped.ShouldBe(times, $"Expected spy tripped {times} times, but actually tripped {timesTripped} times.");
+  }
 
-			CheckTrippedValue(expectedValue);
-		}
-
-		private void CheckTimesTripped(int times)
-		{
-			Assert.AreEqual(times, timesTripped, $"Expected spy tripped {times} times, but actually tripped {timesTripped} times.");
-		}
-
-		private void CheckTrippedValue(object expectedValue)
-		{
-			Assert.AreEqual(expectedValue, value, $"Expected spy tripped with {expectedValue}, but actually tripped with {value}.");
-		}
-	}
+  private void CheckTrippedValue(object expectedValue)
+  {
+    timesTripped.ShouldBe(expectedValue, $"Expected spy tripped with {expectedValue}, but actually tripped with {value}.");
+  }
 }

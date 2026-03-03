@@ -1,35 +1,29 @@
-namespace Tests.Success2Tests
+namespace Tests.Success2Tests;
+
+using System;
+using SampleTypes.Reference;
+using SampleTypes.Value;
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public class ValidationTests
 {
-	using System;
-	using System.Linq;
+  [Fact]
+  public void CannotAssignDefaultValueToReferenceTypes()
+  {
+    Should.Throw<InvalidOperationException>(() => Result.Success<RedDragon, VioletIris>(default));
+  }
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+  [Fact]
+  public void CannotAssignDefaultValueToNullableValueTypes()
+  {
+    Should.Throw<InvalidOperationException>(() => Result.Success<int?, VioletIris>(default));
+  }
 
-	using SampleTypes.Reference;
-	using SampleTypes.Value;
-
-	using SoftwareCraft.Functional;
-
-	[TestClass]
-	public class ValidationTests
-	{
-		[TestMethod]
-		public void CannotAssignDefaultValueToReferenceTypes()
-		{
-			Assert.ThrowsException<InvalidOperationException>
-				(() => Result.Success<RedDragon, VioletIris>(default));
-		}
-
-		[TestMethod]
-		public void CannotAssignDefaultValueToNullableValueTypes()
-		{
-			Assert.ThrowsException<InvalidOperationException>(() => Result.Success<int?, VioletIris>(default));
-		}
-
-		[TestMethod]
-		public void CanAssignDefaultValueToValueTypes()
-		{
-			Assert.IsNotNull(Result.Success<int, VioletIris>(default));
-		}
-	}
+  [Fact]
+  public void CanAssignDefaultValueToValueTypes()
+  {
+    Result.Success<int, VioletIris>(default).ShouldNotBeNull();
+  }
 }

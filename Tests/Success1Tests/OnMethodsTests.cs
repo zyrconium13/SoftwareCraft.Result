@@ -1,56 +1,49 @@
-﻿namespace Tests.Success1Tests
+﻿namespace Tests.Success1Tests;
+
+using Shouldly;
+using SampleTypes.Value;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public class OnMethodsTests
 {
-	using System;
-	using System.Linq;
+  private readonly Spy              spy;
+  private readonly Result<PinkLily> sut;
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+  public OnMethodsTests()
+  {
+    sut = Result.Success<PinkLily>();
 
-	using SampleTypes.Value;
+    spy = new Spy();
+  }
 
-	using SoftwareCraft.Functional;
+  [Fact]
+  public void OnSuccessIsCalled()
+  {
+    var forwardedResult = sut.OnSuccess(() => { spy.Trip(); });
 
-	[TestClass]
-	public class OnMethodsTests
-	{
-		private readonly Result<PinkLily> sut;
+    spy.VerifyTrip(1);
 
-		private readonly Spy spy;
+    forwardedResult.ShouldBeSameAs(sut);
+  }
 
-		public OnMethodsTests()
-		{
-			sut = Result.Success<PinkLily>();
+  [Fact]
+  public void OnErrorIsNotCalled()
+  {
+    var forwardedResult = sut.OnError(e => { spy.Trip(e); });
 
-			spy = new Spy();
-		}
+    spy.VerifyTrip(0);
 
-		[TestMethod]
-		public void OnSuccessIsCalled()
-		{
-			var forwardedResult = sut.OnSuccess(() => { spy.Trip(); });
+    forwardedResult.ShouldBeSameAs(sut);
+  }
 
-			spy.VerifyTrip(1);
+  [Fact]
+  public void OnBothIsCalled()
+    {
+    var forwardedResult = sut.OnBoth(() => { spy.Trip(); });
 
-			Assert.AreSame(sut, forwardedResult);
-		}
+    spy.VerifyTrip(1);
 
-		[TestMethod]
-		public void OnErrorIsNotCalled()
-		{
-			var forwardedResult = sut.OnError(e => { spy.Trip(e); });
-
-			spy.VerifyTrip(0);
-
-			Assert.AreSame(sut, forwardedResult);
-		}
-
-		[TestMethod]
-		public void OnBothIsCalled()
-		{
-			var forwardedResult = sut.OnBoth(() => { spy.Trip(); });
-
-			spy.VerifyTrip(1);
-
-			Assert.AreSame(sut, forwardedResult);
-		}
-	}
+    forwardedResult.ShouldBeSameAs(sut);
+  }
 }

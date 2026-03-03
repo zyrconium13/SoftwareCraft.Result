@@ -1,89 +1,82 @@
-﻿namespace Tests.Success2Tests
+﻿namespace Tests.Success2Tests;
+
+using SampleTypes.Reference;
+using SampleTypes.Value;
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public sealed class MappingTests
 {
-	using System;
-	using System.Linq;
+  private readonly Result<RedDragon, PinkLily> result;
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+  private readonly Spy spy;
 
-	using SampleTypes.Reference;
-	using SampleTypes.Value;
+  private readonly RedDragon successValue;
 
-	using SoftwareCraft.Functional;
+  public MappingTests()
+  {
+    successValue = new RedDragon();
 
-	[TestClass]
-	public sealed class MappingTests
-	{
-		private readonly Result<RedDragon, PinkLily> result;
+    result = Result.Success<RedDragon, PinkLily>(successValue);
 
-		private readonly Spy spy;
+    spy = new Spy();
+  }
 
-		private readonly RedDragon successValue;
+  [Fact]
+  public void MapsAndWrapsTheValueAndChangesTheErrorType()
+  {
+    // Result<RedDragon, PinkLily> -> Result<VioletIris, GreenTurtle>
 
-		public MappingTests()
-		{
-			successValue = new RedDragon();
+    var mappedResult = result.Select(
+      v =>
+      {
+        spy.Trip(v);
+        return new VioletIris();
+      },
+      e =>
+      {
+        spy.Trip(e);
+        return new GreenTurtle();
+      });
 
-			result = Result.Success<RedDragon, PinkLily>(successValue);
+    mappedResult.ShouldBeOfType<Success<VioletIris, GreenTurtle>>();
+    spy.VerifyTrip(1, successValue);
+  }
 
-			spy = new Spy();
-		}
+  [Fact]
+  public void MapsAndFlattensTheValueAndChangesTheErrorType()
+  {
+    // Result<RedDragon, PinkLily> -> Result<VioletIris, GreenTurtle>
 
-		[TestMethod]
-		public void MapsAndWrapsTheValueAndChangesTheErrorType()
-		{
-			// Result<RedDragon, PinkLily> -> Result<VioletIris, GreenTurtle>
+    var mappedResult = result.SelectMany(
+      v =>
+      {
+        spy.Trip(v);
+        return Result.Success<VioletIris, GreenTurtle>(new VioletIris());
+      },
+      e =>
+      {
+        spy.Trip(e);
+        return Result.Error<VioletIris, GreenTurtle>(new GreenTurtle());
+      });
 
-			var mappedResult = result.Select(
-				v =>
-				{
-					spy.Trip(v);
-					return new VioletIris();
-				},
-				e =>
-				{
-					spy.Trip(e);
-					return new GreenTurtle();
-				});
+    mappedResult.ShouldBeOfType<Success<VioletIris, GreenTurtle>>();
+    spy.VerifyTrip(1, successValue);
+  }
 
-			Assert.IsInstanceOfType(mappedResult, typeof(Success<VioletIris, GreenTurtle>));
-			spy.VerifyTrip(1, successValue);
-		}
+  [Fact]
+  public void MapsAndFlattensTheValueButDoesNotChangeTheErrorType()
+  {
+    // Result<RedDragon, PinkLily> -> Result<VioletIris, PinkLily>
 
-		[TestMethod]
-		public void MapsAndFlattensTheValueAndChangesTheErrorType()
-		{
-			// Result<RedDragon, PinkLily> -> Result<VioletIris, GreenTurtle>
+    var mappedResult = result.SelectMany(v =>
+                                         {
+                                           spy.Trip(v);
+                                           return Result.Success<VioletIris, PinkLily>(new VioletIris());
+                                         });
 
-			var mappedResult = result.SelectMany(
-				v =>
-				{
-					spy.Trip(v);
-					return Result.Success<VioletIris, GreenTurtle>(new VioletIris());
-				},
-				e =>
-				{
-					spy.Trip(e);
-					return Result.Error<VioletIris, GreenTurtle>(new GreenTurtle());
-				});
-
-			Assert.IsInstanceOfType(mappedResult, typeof(Success<VioletIris, GreenTurtle>));
-			spy.VerifyTrip(1, successValue);
-		}
-
-		[TestMethod]
-		public void MapsAndFlattensTheValueButDoesNotChangeTheErrorType()
-		{
-			// Result<RedDragon, PinkLily> -> Result<VioletIris, PinkLily>
-
-			var mappedResult = result.SelectMany(
-				v =>
-				{
-					spy.Trip(v);
-					return Result.Success<VioletIris, PinkLily>(new VioletIris());
-				});
-
-			Assert.IsInstanceOfType(mappedResult, typeof(Success<VioletIris, PinkLily>));
-			spy.VerifyTrip(1, successValue);
-		}
-	}
+    mappedResult.ShouldBeOfType<Success<VioletIris, PinkLily>>();
+    spy.VerifyTrip(1, successValue);
+  }
 }

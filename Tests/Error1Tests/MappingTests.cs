@@ -1,64 +1,58 @@
-﻿namespace Tests.Error1Tests
+﻿namespace Tests.Error1Tests;
+
+using System;
+using SampleTypes.Value;
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public sealed class MappingTests : IDisposable
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+  private readonly PinkLily errorValue;
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+  private readonly Result<PinkLily> result;
 
-	using SampleTypes.Value;
+  private readonly Spy spy;
 
-	using SoftwareCraft.Functional;
+  public MappingTests()
+  {
+    errorValue = new PinkLily();
+    result     = Result.Error(errorValue);
+    spy        = new Spy();
+  }
 
-	[TestClass]
-	public sealed class MappingTests : IDisposable
-	{
-		private readonly PinkLily errorValue;
+  public void Dispose()
+  {
+    spy.VerifyTrip(1, errorValue);
+  }
 
-		private readonly Result<PinkLily> result;
+  [Fact]
+  public void MapsAndWrapsErrorValue()
+  {
+    var newResult = result.Select(
+      () => { },
+      e =>
+      {
+        spy.Trip(e);
+        return new VioletIris();
+      });
 
-		private readonly Spy spy;
+    newResult.ShouldBeOfType<Result<VioletIris>>();
+    newResult.ShouldBeOfType<Error<VioletIris>>();
+  }
 
-		public MappingTests()
-		{
-			errorValue = new();
-			result     = Result.Error(errorValue);
-			spy        = new();
-		}
+  [Fact]
+  public void MapsAndFlattensErrorValue()
+  {
+    var newResult = result.SelectMany(
+      Result.Success<VioletIris>,
+      e =>
+      {
+        spy.Trip(e);
+        return Result.Error(new VioletIris());
+      });
 
-		public void Dispose()
-		{
-			spy?.VerifyTrip(1, errorValue);
-		}
-
-		[TestMethod]
-		public void MapsAndWrapsErrorValue()
-		{
-			var newResult = result.Select(
-				() => { },
-				e =>
-				{
-					spy.Trip(e);
-					return new VioletIris();
-				});
-
-			Assert.IsInstanceOfType(newResult, typeof(Result<VioletIris>));
-			Assert.IsInstanceOfType(newResult, typeof(Error<VioletIris>));
-		}
-
-		[TestMethod]
-		public void MapsAndFlattensErrorValue()
-		{
-			var newResult = result.SelectMany(
-				Result.Success<VioletIris>,
-				e =>
-				{
-					spy.Trip(e);
-					return Result.Error(new VioletIris());
-				});
-
-			Assert.IsInstanceOfType(newResult, typeof(Result<VioletIris>));
-			Assert.IsInstanceOfType(newResult, typeof(Error<VioletIris>));
-		}
-	}
+    newResult.ShouldBeOfType<Result<VioletIris>>();
+    newResult.ShouldBeOfType<Error<VioletIris>>();
+  }
 }

@@ -1,34 +1,28 @@
-namespace Tests.Error1Tests
+namespace Tests.Error1Tests;
+
+using System;
+using SampleTypes.Reference;
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public class ValidationTests
 {
-	using System;
-	using System.Linq;
+  [Fact]
+  public void CannotAssignDefaultValueToReferenceTypes()
+  {
+    Should.Throw<InvalidOperationException>(() => Result.Error<RedDragon>(default));
+  }
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+  [Fact]
+  public void CannotAssignDefaultValueToNullableValueTypes()
+  {
+    Should.Throw<InvalidOperationException>(() => Result.Error<int?>(default));
+  }
 
-	using SampleTypes.Reference;
-
-	using SoftwareCraft.Functional;
-
-	[TestClass]
-	public class ValidationTests
-	{
-		[TestMethod]
-		public void CannotAssignDefaultValueToReferenceTypes()
-		{
-			Assert.ThrowsException<InvalidOperationException>
-				(() => Result.Error<RedDragon>(default));
-		}
-
-		[TestMethod]
-		public void CannotAssignDefaultValueToNullableValueTypes()
-		{
-			Assert.ThrowsException<InvalidOperationException>(() => Result.Error<int?>(default));
-		}
-
-		[TestMethod]
-		public void CanAssignDefaultValueToValueTypes()
-		{
-			Assert.IsNotNull(Result.Error<int>(default));
-		}
-	}
+  [Fact]
+  public void CanAssignDefaultValueToValueTypes()
+  {
+    Result.Error<int>(default).ShouldNotBeNull();
+  }
 }

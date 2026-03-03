@@ -21,65 +21,41 @@ public static class Result
 	{
 		#region Lift2
 
-		#region Result`1
+    #region Result`1
 
-		public static Result<TError> Lift<TError>
-		(
-			Result<TError> r1,
-			Result<TError> r2
-		)
-			=> r1.SelectMany(
-				() => r2.SelectMany(
-					Success<TError>));
+    public static Result<TError> Lift<TError>(
+      Result<TError> r1
+    , Result<TError> r2)
+      => r1.SelectMany(() => r2.Select(() => Success<TError>()));
 
-		public static async Task<Result<TError>> LiftAsync<TError>
-		(
-			Task<Result<TError>> r1,
-			Task<Result<TError>> r2
-		)
-			=> await (await r1).SelectManyAsync(
-				async () => (await r2).SelectMany(
-					Success<TError>));
+    public static Task<Result<TError>> LiftAsync<TError>(
+      Task<Result<TError>> r1
+    , Task<Result<TError>> r2)
+      => r1.SelectManyAsync(() => r2.SelectMany(Success<TError>));
 
-		public static Result<TError> LiftLazy<TError>
-		(
-			Func<Result<TError>> r1,
-			Func<Result<TError>> r2
-		)
-			=> r1().SelectMany(
-				() => r2().SelectMany(
-					Success<TError>));
+    public static Result<TError> LiftLazy<TError>(
+      Func<Result<TError>> r1
+    , Func<Result<TError>> r2)
+      => r1().SelectMany(() => r2().SelectMany(Success<TError>));
 
-		public static async Task<Result<TError>> LiftLazyAsync<TError>
-		(
-			Func<Task<Result<TError>>> r1,
-			Func<Task<Result<TError>>> r2
-		)
-			=> await (await r1()).SelectManyAsync(
-				async () => (await r2()).SelectMany(
-					Success<TError>));
+    public static Task<Result<TError>> LiftLazyAsync<TError>(
+      Func<Task<Result<TError>>> r1
+    , Func<Task<Result<TError>>> r2)
+      => r1().SelectManyAsync(() => r2().SelectMany(Success<TError>));
 
-		#endregion
+    #endregion
 
 		#region Result`2
 
-		public static Result<Tuple<T1, T2>, TError> Lift<T1, T2, TError>
-		(
-			Result<T1, TError> r1,
-			Result<T2, TError> r2
-		)
-			=> r1.SelectMany(
-				t1 => r2.SelectMany(
-					t2 => Success<Tuple<T1, T2>, TError>(Tuple.Create(t1, t2))));
+    public static Result<Tuple<T1, T2>, TError> Lift<T1, T2, TError>(
+      Result<T1, TError> r1
+    , Result<T2, TError> r2)
+      => r1.SelectMany(t1 => r2.Select<Tuple<T1, T2>>(t2 => Tuple.Create(t1, t2)));
 
-		public static async Task<Result<Tuple<T1, T2>, TError>> LiftAsync<T1, T2, TError>
-		(
-			Task<Result<T1, TError>> r1,
-			Task<Result<T2, TError>> r2
-		)
-			=> await (await r1).SelectManyAsync(
-				async t1 => (await r2).SelectMany(
-					t2 => Success<Tuple<T1, T2>, TError>(Tuple.Create(t1, t2))));
+    public static Task<Result<Tuple<T1, T2>, TError>> LiftAsync<T1, T2, TError>(
+      Task<Result<T1, TError>> r1
+    , Task<Result<T2, TError>> r2)
+      => r1.SelectManyAsync(t1 => r2.SelectMany(t2 => Success<Tuple<T1, T2>, TError>(Tuple.Create(t1, t2))));
 
 		public static Result<Tuple<T1, T2>, TError> LiftLazy<T1, T2, TError>
 		(

@@ -5,6 +5,29 @@ using System.Threading.Tasks;
 
 public static class TaskResult2Extensions
 {
+  #region Match
+
+  extension<TValue, TError>(Task<Result<TValue, TError>> @this)
+  {
+    public async Task Match(Action<TValue> matchValue,
+                            Action<TError> matchError)
+      => (await @this).Match(matchValue, matchError);
+
+    public async Task<TOut> Match<TOut>(Func<TValue, TOut> matchValue,
+                                        Func<TError, TOut> matchError)
+      => (await @this).Match(matchValue, matchError);
+
+    public async Task MatchAsync(Func<TValue, Task> matchValue,
+                                 Func<TError, Task> matchError)
+      => await (await @this).MatchAsync(matchValue, matchError);
+
+    public async Task<TOut> MatchAsync<TOut>(Func<TValue, Task<TOut>> matchValue,
+                                             Func<TError, Task<TOut>> matchError)
+      => await (await @this).MatchAsync(matchValue, matchError);
+  }
+
+  #endregion
+
   #region Select
 
   extension<TValue, TError>(Task<Result<TValue, TError>> @this)
@@ -95,29 +118,6 @@ public static class TaskResult2Extensions
 
     public async Task<Result<UError>> SelectSwitchManyAsync<UError>(Func<TError, Task<Result<UError>>> mapError)
       => await (await @this).SelectSwitchManyAsync(mapError);
-  }
-
-  #endregion
-
-  #region Match
-
-  extension<TValue, TError>(Task<Result<TValue, TError>> @this)
-  {
-    public async Task Match(Action<TValue> matchValue,
-                            Action<TError> matchError)
-      => (await @this).Match(matchValue, matchError);
-
-    public async Task<TOut> Match<TOut>(Func<TValue, TOut> matchValue,
-                                        Func<TError, TOut> matchError)
-      => (await @this).Match(matchValue, matchError);
-
-    public async Task MatchAsync(Func<TValue, Task> matchValue,
-                                 Func<TError, Task> matchError)
-      => await (await @this).MatchAsync(matchValue, matchError);
-
-    public async Task<TOut> MatchAsync<TOut>(Func<TValue, Task<TOut>> matchValue,
-                                             Func<TError, Task<TOut>> matchError)
-      => await (await @this).MatchAsync(matchValue, matchError);
   }
 
   #endregion

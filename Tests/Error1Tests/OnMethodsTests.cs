@@ -1,58 +1,53 @@
-﻿namespace Tests.Error1Tests
+﻿namespace Tests.Error1Tests;
+
+using Shouldly;
+using SoftwareCraft.Functional;
+using Xunit;
+
+public class OnMethodsTests
 {
-	using System;
-	using System.Linq;
+  private readonly string errorValue;
 
-	using Microsoft.VisualStudio.TestTools.UnitTesting;
+  private readonly Result<string> result;
 
-	using SoftwareCraft.Functional;
+  private readonly Spy spy;
 
-	[TestClass]
-	public class OnMethodsTests
-	{
-		private readonly string errorValue;
+  public OnMethodsTests()
+  {
+    errorValue = "error";
 
-		private readonly Result<string> result;
+    result = Result.Error(errorValue);
 
-		private readonly Spy spy;
+    spy = new Spy();
+  }
 
-		public OnMethodsTests()
-		{
-			errorValue = "error";
+  [Fact]
+  public void OnSuccessIsNotCalled()
+  {
+    var forwardedResult = result.OnSuccess(() => { spy.Trip(); });
 
-			result = Result.Error(errorValue);
+    spy.VerifyTrip(0);
 
-			spy = new Spy();
-		}
+    forwardedResult.ShouldBeSameAs(result);
+  }
 
-		[TestMethod]
-		public void OnSuccessIsNotCalled()
-		{
-			var forwardedResult = result.OnSuccess(() => { spy.Trip(); });
+  [Fact]
+  public void OnErrorIsCalled()
+  {
+    var forwardedResult = result.OnError(e => { spy.Trip(e); });
 
-			spy.VerifyTrip(0);
+    spy.VerifyTrip(1, errorValue);
 
-			Assert.AreSame(result, forwardedResult);
-		}
+    forwardedResult.ShouldBeSameAs(result);
+  }
 
-		[TestMethod]
-		public void OnErrorIsCalled()
-		{
-			var forwardedResult = result.OnError(e => { spy.Trip(e); });
+  [Fact]
+  public void OnBothIsCalled()
+  {
+    var forwardedResult = result.OnBoth(() => { spy.Trip(); });
 
-			spy.VerifyTrip(1, errorValue);
+    spy.VerifyTrip(1);
 
-			Assert.AreSame(result, forwardedResult);
-		}
-
-		[TestMethod]
-		public void OnBothIsCalled()
-		{
-			var forwardedResult = result.OnBoth(() => { spy.Trip(); });
-
-			spy.VerifyTrip(1);
-
-			Assert.AreSame(result, forwardedResult);
-		}
-	}
+    forwardedResult.ShouldBeSameAs(result);
+  }
 }
