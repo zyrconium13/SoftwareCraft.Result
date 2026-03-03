@@ -3,7 +3,7 @@
 using SampleTypes.Reference;
 using SoftwareCraft.Functional;
 
-public class Result2TestDataGeneratorAsResults : IGenerator
+public sealed class Result2TestDataGeneratorAsResults : IGenerator
 {
   public object[] Generate(int size, int errorPosition)
   {

@@ -3,7 +3,7 @@
 using Shouldly;
 using SoftwareCraft.Functional;
 
-public class OnMethodsTests
+public sealed class OnMethodsTests
 {
   private readonly string errorValue;
 

@@ -2,7 +2,7 @@
 
 using SoftwareCraft.Functional;
 
-public class Result1TestDataGeneratorAsFunctions : IGenerator
+public sealed class Result1TestDataGeneratorAsFunctions : IGenerator
 {
   public object[] Generate(int size, int errorPosition)
   {

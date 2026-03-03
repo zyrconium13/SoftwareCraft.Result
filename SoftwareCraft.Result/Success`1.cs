@@ -151,14 +151,14 @@ public sealed class Success<TError> : Result<TError>
     Func<TError, Task<Result<UError>>> mapError)
     => Task.FromResult((Result<UError>)new Success<UError>());
 
-  public override async Task<Result<UValue, UError>> SelectSwitchManyAsync<UValue, UError>(
+  public override Task<Result<UValue, UError>> SelectSwitchManyAsync<UValue, UError>(
     Func<Task<Result<UValue, UError>>>         mapSuccess,
     Func<TError, Task<Result<UValue, UError>>> mapError)
-    => await mapSuccess();
+    => mapSuccess();
 
-  public override async Task<Result<UValue, TError>> SelectSwitchManyAsync<UValue>(
+  public override Task<Result<UValue, TError>> SelectSwitchManyAsync<UValue>(
     Func<Task<Result<UValue, TError>>> mapSuccess)
-    => await mapSuccess();
+    => mapSuccess();
 
   #endregion
 }

@@ -4,7 +4,7 @@ using SampleTypes.Reference;
 using Shouldly;
 using SoftwareCraft.Functional;
 
-public class ValidationTests
+public sealed class ValidationTests
 {
   [Fact]
   public void CannotAssignDefaultValueToReferenceTypes()

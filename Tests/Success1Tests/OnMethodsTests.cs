@@ -4,17 +4,10 @@ using SampleTypes.Value;
 using Shouldly;
 using SoftwareCraft.Functional;
 
-public class OnMethodsTests
+public sealed class OnMethodsTests
 {
-  private readonly Spy              spy;
-  private readonly Result<PinkLily> sut;
-
-  public OnMethodsTests()
-  {
-    sut = Result.Success<PinkLily>();
-
-    spy = new Spy();
-  }
+  private readonly Spy              spy = new();
+  private readonly Result<PinkLily> sut = Result.Success<PinkLily>();
 
   [Fact]
   public void OnSuccessIsCalled()

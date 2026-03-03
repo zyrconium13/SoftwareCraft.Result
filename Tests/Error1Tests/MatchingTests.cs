@@ -4,7 +4,7 @@ using SampleTypes.Value;
 using Shouldly;
 using SoftwareCraft.Functional;
 
-public class MatchingTests
+public sealed class MatchingTests
 {
   [Fact]
   public void ActionMatchingOverloadInvokesTheErrorBranchWithTheProvidedErrorValue()

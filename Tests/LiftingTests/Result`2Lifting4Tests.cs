@@ -7,7 +7,7 @@ using Shouldly;
 using SoftwareCraft.Functional;
 using TestData;
 
-public class Result2Lifting4Tests
+public sealed class Result2Lifting4Tests
 {
   #region Lift
 
@@ -134,12 +134,9 @@ public class Result2Lifting4Tests
   #endregion
 }
 
-public class Result2_Lift4ErrorTestData : IEnumerable<object[]>
+public sealed class Result2_Lift4ErrorTestData : IEnumerable<object[]>
 {
-  private readonly IGenerator g;
-
-  public Result2_Lift4ErrorTestData()
-    => g = Result2TestDataGenerator.AsResults();
+  private readonly IGenerator g = Result2TestDataGenerator.AsResults();
 
   public IEnumerator<object[]> GetEnumerator()
   {
@@ -152,12 +149,9 @@ public class Result2_Lift4ErrorTestData : IEnumerable<object[]>
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
-public class Result2_LiftLazy4ErrorTestData : IEnumerable<object[]>
+public sealed class Result2_LiftLazy4ErrorTestData : IEnumerable<object[]>
 {
-  private readonly IGenerator g;
-
-  public Result2_LiftLazy4ErrorTestData()
-    => g = Result2TestDataGenerator.AsFunctions();
+  private readonly IGenerator g = Result2TestDataGenerator.AsFunctions();
 
   public IEnumerator<object[]> GetEnumerator()
   {
@@ -170,12 +164,9 @@ public class Result2_LiftLazy4ErrorTestData : IEnumerable<object[]>
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
-public class Result2_LiftAsync4ErrorTestData : IEnumerable<object[]>
+public sealed class Result2_LiftAsync4ErrorTestData : IEnumerable<object[]>
 {
-  private readonly IGenerator g;
-
-  public Result2_LiftAsync4ErrorTestData()
-    => g = Result2TestDataGenerator.AsTasks();
+  private readonly IGenerator g = Result2TestDataGenerator.AsTasks();
 
   public IEnumerator<object[]> GetEnumerator()
   {
@@ -188,12 +179,9 @@ public class Result2_LiftAsync4ErrorTestData : IEnumerable<object[]>
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
-public class Result2_LiftLazyAsync4ErrorTestData : IEnumerable<object[]>
+public sealed class Result2_LiftLazyAsync4ErrorTestData : IEnumerable<object[]>
 {
-  private readonly IGenerator g;
-
-  public Result2_LiftLazyAsync4ErrorTestData()
-    => g = Result2TestDataGenerator.AsFunctionTasks();
+  private readonly IGenerator g = Result2TestDataGenerator.AsFunctionTasks();
 
   public IEnumerator<object[]> GetEnumerator()
   {

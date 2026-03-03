@@ -7,14 +7,8 @@ using SoftwareCraft.Functional;
 
 public sealed class MappingTests
 {
-  private readonly Spy errorSpy;
-  private readonly Spy successSpy;
-
-  public MappingTests()
-  {
-    successSpy = new Spy();
-    errorSpy   = new Spy();
-  }
+  private readonly Spy errorSpy   = new();
+  private readonly Spy successSpy = new();
 
   #region SelectMany
 

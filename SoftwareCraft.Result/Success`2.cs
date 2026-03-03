@@ -155,9 +155,9 @@ public sealed class Success<TValue, TError> : Result<TValue, TError>
     Func<TError, Task<Result<UValue, UError>>> mapError)
     => mapValue(value);
 
-  public override async Task<Result<UValue, TError>> SelectManyAsync<UValue>(
+  public override Task<Result<UValue, TError>> SelectManyAsync<UValue>(
     Func<TValue, Task<Result<UValue, TError>>> mapValue)
-    => await mapValue(value);
+    => mapValue(value);
 
   public override Task<Result<TValue, UError>> SelectManyAsync<UError>(
     Func<TError, Task<Result<TValue, UError>>> mapError)
@@ -168,8 +168,8 @@ public sealed class Success<TValue, TError> : Result<TValue, TError>
     Func<TError, Task<Result<UError>>> mapError)
     => mapValue(value);
 
-  public override async Task<Result<TError>> SelectSwitchManyAsync(Func<TValue, Task<Result<TError>>> mapValue)
-    => await mapValue(value);
+  public override Task<Result<TError>> SelectSwitchManyAsync(Func<TValue, Task<Result<TError>>> mapValue)
+    => mapValue(value);
 
   public override Task<Result<UError>> SelectSwitchManyAsync<UError>(Func<TError, Task<Result<UError>>> mapError)
     => Task.FromResult((Result<UError>)new Success<UError>());

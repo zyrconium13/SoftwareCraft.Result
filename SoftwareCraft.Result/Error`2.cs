@@ -90,7 +90,7 @@ public sealed class Error<TValue, TError> : Result<TValue, TError>
     => new Error<UValue, UError>(await mapError(error));
 
   public override Task<Result<UValue, TError>> SelectAsync<UValue>(Func<TValue, Task<UValue>> mapValue)
-    => Task.FromResult((Result<UValue, TError>)new Error<UValue, TError>(error));
+    => Task.FromResult<Result<UValue, TError>>(new Error<UValue, TError>(error));
 
   public override async Task<Result<TValue, UError>> SelectAsync<UError>(Func<TError, Task<UError>> mapError)
     => new Error<TValue, UError>(await mapError(error));
@@ -101,7 +101,7 @@ public sealed class Error<TValue, TError> : Result<TValue, TError>
     => new Error<UError>(await mapError(error));
 
   public override Task<Result<TError>> SelectSwitchAsync(Func<TValue, Task> mapValue)
-    => Task.FromResult((Result<TError>)new Error<TError>(error));
+    => Task.FromResult<Result<TError>>(new Error<TError>(error));
 
   public override async Task<Result<UError>> SelectSwitchAsync<UError>(Func<TError, Task<UError>> mapError)
     => new Error<UError>(await mapError(error));
@@ -136,11 +136,11 @@ public sealed class Error<TValue, TError> : Result<TValue, TError>
 
   public override Task<Result<UValue, TError>>
     SelectManyAsync<UValue>(Func<TValue, Task<Result<UValue, TError>>> mapValue)
-    => Task.FromResult((Result<UValue, TError>)new Error<UValue, TError>(error));
+    => Task.FromResult<Result<UValue, TError>>(new Error<UValue, TError>(error));
 
-  public override async Task<Result<TValue, UError>> SelectManyAsync<UError>(
+  public override Task<Result<TValue, UError>> SelectManyAsync<UError>(
     Func<TError, Task<Result<TValue, UError>>> mapError)
-    => await mapError(error);
+    => mapError(error);
 
   public override Result<UError> SelectSwitchMany<UError>(
     Func<TValue, Result<UError>> mapValue,
@@ -154,11 +154,11 @@ public sealed class Error<TValue, TError> : Result<TValue, TError>
 
   public override Task<Result<TError>> SelectSwitchManyAsync(
     Func<TValue, Task<Result<TError>>> mapValue)
-    => Task.FromResult((Result<TError>)new Error<TError>(error));
+    => Task.FromResult<Result<TError>>(new Error<TError>(error));
 
-  public override async Task<Result<UError>> SelectSwitchManyAsync<UError>(
+  public override Task<Result<UError>> SelectSwitchManyAsync<UError>(
     Func<TError, Task<Result<UError>>> mapError)
-    => await mapError(error);
+    => mapError(error);
 
   #endregion
 }

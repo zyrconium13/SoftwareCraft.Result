@@ -1,10 +1,10 @@
 namespace Tests.SampleTypes.Reference
 {
-  public class RedDragon
+  public sealed class RedDragon
   {
   }
 
-  public class GreenTurtle
+  public sealed class GreenTurtle
   {
   }
 }
