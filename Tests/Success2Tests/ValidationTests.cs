@@ -10,18 +10,18 @@ public sealed class ValidationTests
   [Fact]
   public void CannotAssignDefaultValueToReferenceTypes()
   {
-    Should.Throw<InvalidOperationException>(() => Result.Success<RedDragon, VioletIris>(default));
+    Should.Throw<InvalidOperationException>(() => Result.Success<RedDragon, VioletIris>(null!));
   }
 
   [Fact]
   public void CannotAssignDefaultValueToNullableValueTypes()
   {
-    Should.Throw<InvalidOperationException>(() => Result.Success<int?, VioletIris>(default));
+    Should.Throw<InvalidOperationException>(() => Result.Success<PinkLily?, VioletIris>(null));
   }
 
   [Fact]
   public void CanAssignDefaultValueToValueTypes()
   {
-    Result.Success<int, VioletIris>(default).ShouldNotBeNull();
+    Result.Success<PinkLily, VioletIris>(default).ShouldNotBeNull();
   }
 }

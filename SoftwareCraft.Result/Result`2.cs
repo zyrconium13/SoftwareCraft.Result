@@ -12,7 +12,7 @@ public abstract class Result<TValue, TError>
   {
     var isNotValueType      = !typeof(T).IsValueType;
     var isNullableValueType = Nullable.GetUnderlyingType(typeof(T)) != null;
-    var hasDefaultValue     = EqualityComparer<T>.Default.Equals(value, default);
+    var hasDefaultValue     = EqualityComparer<T>.Default.Equals(value, default!);
 
     if ((isNotValueType || isNullableValueType) && hasDefaultValue)
       throw new InvalidOperationException();
