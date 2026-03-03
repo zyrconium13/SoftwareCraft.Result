@@ -1,24 +1,21 @@
 ﻿namespace Tests.Error1Tests;
 
-using System;
 using SampleTypes.Value;
 using Shouldly;
 using SoftwareCraft.Functional;
-using Xunit;
 
 public sealed class MappingTests : IDisposable
 {
-  private readonly PinkLily errorValue;
-
-  private readonly Result<PinkLily> result;
+  private readonly Result<PinkLily> errorResult;
+  private readonly PinkLily         errorValue;
 
   private readonly Spy spy;
 
   public MappingTests()
   {
-    errorValue = new PinkLily();
-    result     = Result.Error(errorValue);
-    spy        = new Spy();
+    errorValue  = new PinkLily();
+    errorResult = Result.Error(errorValue);
+    spy         = new Spy();
   }
 
   public void Dispose()
@@ -29,7 +26,7 @@ public sealed class MappingTests : IDisposable
   [Fact]
   public void MapsAndWrapsErrorValue()
   {
-    var newResult = result.Select(
+    var newResult = errorResult.Select(
       () => { },
       e =>
       {
@@ -37,14 +34,13 @@ public sealed class MappingTests : IDisposable
         return new VioletIris();
       });
 
-    newResult.ShouldBeOfType<Result<VioletIris>>();
     newResult.ShouldBeOfType<Error<VioletIris>>();
   }
 
   [Fact]
   public void MapsAndFlattensErrorValue()
   {
-    var newResult = result.SelectMany(
+    var newResult = errorResult.SelectMany(
       Result.Success<VioletIris>,
       e =>
       {
@@ -52,7 +48,6 @@ public sealed class MappingTests : IDisposable
         return Result.Error(new VioletIris());
       });
 
-    newResult.ShouldBeOfType<Result<VioletIris>>();
     newResult.ShouldBeOfType<Error<VioletIris>>();
   }
 }

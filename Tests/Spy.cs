@@ -2,11 +2,10 @@
 
 using Shouldly;
 
-public class Spy
+internal sealed class Spy
 {
-  private int timesTripped;
-
-  private object value;
+  private object expectedValue;
+  private int    timesTripped;
 
   public void Trip()
   {
@@ -16,7 +15,7 @@ public class Spy
   public void Trip(object expectedValue)
   {
     timesTripped++;
-    value = expectedValue;
+    this.expectedValue = expectedValue;
   }
 
   public void VerifyTrip(int times)
@@ -24,20 +23,20 @@ public class Spy
     CheckTimesTripped(times);
   }
 
-  public void VerifyTrip(int times, object expectedValue)
+  public void VerifyTrip(int times, object actualValue)
   {
     CheckTimesTripped(times);
 
-    CheckTrippedValue(expectedValue);
+    CheckTrippedValue(actualValue);
   }
 
   private void CheckTimesTripped(int times)
   {
-    timesTripped.ShouldBe(times, $"Expected spy tripped {times} times, but actually tripped {timesTripped} times.");
+    times.ShouldBe(timesTripped, $"Expected spy tripped {times} times, but actually tripped {timesTripped} times.");
   }
 
-  private void CheckTrippedValue(object expectedValue)
+  private void CheckTrippedValue(object actualValue)
   {
-    timesTripped.ShouldBe(expectedValue, $"Expected spy tripped with {expectedValue}, but actually tripped with {value}.");
+    actualValue.ShouldBe(expectedValue, $"Expected spy tripped with {actualValue}, but actually tripped with {expectedValue}.");
   }
 }
