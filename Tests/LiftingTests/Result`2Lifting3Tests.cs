@@ -1,15 +1,11 @@
 ﻿namespace Tests.LiftingTests;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using SampleTypes.Reference;
 using SampleTypes.Value;
 using Shouldly;
 using SoftwareCraft.Functional;
 using TestData;
-using Xunit;
 
 public class Result2Lifting3Tests
 {

@@ -3,7 +3,6 @@
 using SampleTypes.Reference;
 using Shouldly;
 using SoftwareCraft.Functional;
-using Xunit;
 
 public class MatchingTests
 {

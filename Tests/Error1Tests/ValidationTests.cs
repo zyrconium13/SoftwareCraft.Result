@@ -1,10 +1,8 @@
 namespace Tests.Error1Tests;
 
-using System;
 using SampleTypes.Reference;
 using Shouldly;
 using SoftwareCraft.Functional;
-using Xunit;
 
 public class ValidationTests
 {

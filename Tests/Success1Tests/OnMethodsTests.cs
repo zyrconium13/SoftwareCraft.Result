@@ -1,9 +1,8 @@
 ﻿namespace Tests.Success1Tests;
 
-using Shouldly;
 using SampleTypes.Value;
+using Shouldly;
 using SoftwareCraft.Functional;
-using Xunit;
 
 public class OnMethodsTests
 {
@@ -39,7 +38,7 @@ public class OnMethodsTests
 
   [Fact]
   public void OnBothIsCalled()
-    {
+  {
     var forwardedResult = sut.OnBoth(() => { spy.Trip(); });
 
     spy.VerifyTrip(1);

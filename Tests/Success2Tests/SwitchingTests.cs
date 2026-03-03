@@ -1,12 +1,9 @@
 ﻿namespace Tests.Success2Tests;
 
-using System;
-using System.Threading.Tasks;
 using SampleTypes.Reference;
 using SampleTypes.Value;
 using Shouldly;
 using SoftwareCraft.Functional;
-using Xunit;
 
 public sealed class SwitchingTests
 {
@@ -51,11 +48,11 @@ public sealed class SwitchingTests
   public void Fact3()
   {
     success.SelectSwitch(e =>
-                                                    {
-                                                      spy.Trip();
+                         {
+                           spy.Trip();
 
-                                                      return e;
-                                                    }).ShouldBeOfType<Success<PinkLily>>();
+                           return e;
+                         }).ShouldBeOfType<Success<PinkLily>>();
 
     spy.VerifyTrip(0);
   }
@@ -79,11 +76,11 @@ public sealed class SwitchingTests
   public void Fact5()
   {
     fail.SelectSwitch(v =>
-                                               {
-                                                 spy.Trip(v);
+                      {
+                        spy.Trip(v);
 
-                                                 throw new Exception();
-                                               }).ShouldBeOfType<Error<PinkLily>>();
+                        throw new Exception();
+                      }).ShouldBeOfType<Error<PinkLily>>();
 
     spy.VerifyTrip(0);
   }
@@ -92,11 +89,11 @@ public sealed class SwitchingTests
   public void Fact6()
   {
     fail.SelectSwitch(e =>
-                                               {
-                                                 spy.Trip(e);
+                      {
+                        spy.Trip(e);
 
-                                                 return e;
-                                               }).ShouldBeOfType<Error<PinkLily>>();
+                        return e;
+                      }).ShouldBeOfType<Error<PinkLily>>();
 
     spy.VerifyTrip(1, failValue);
   }
@@ -105,12 +102,12 @@ public sealed class SwitchingTests
   public async Task Fact7()
   {
     (await success.SelectSwitchAsync<PinkLily>(
-                                 v =>
-                                 {
-                                   spy.Trip(v);
-                                   return Task.CompletedTask;
-                                 },
-                                 e => throw new Exception())).ShouldBeOfType<Success<PinkLily>>();
+       v =>
+       {
+         spy.Trip(v);
+         return Task.CompletedTask;
+       },
+       e => throw new Exception())).ShouldBeOfType<Success<PinkLily>>();
 
     spy.VerifyTrip(1, successValue);
   }
@@ -119,10 +116,10 @@ public sealed class SwitchingTests
   public async Task Fact8()
   {
     (await success.SelectSwitchAsync(v =>
-                                                               {
-                                                                 spy.Trip(v);
-                                                                 return Task.CompletedTask;
-                                                               })).ShouldBeOfType<Success<PinkLily>>();
+                                     {
+                                       spy.Trip(v);
+                                       return Task.CompletedTask;
+                                     })).ShouldBeOfType<Success<PinkLily>>();
 
     spy.VerifyTrip(1, successValue);
   }
@@ -131,11 +128,11 @@ public sealed class SwitchingTests
   public async Task Fact9()
   {
     (await success.SelectSwitchAsync(e =>
-                                                               {
-                                                                 spy.Trip(e);
+                                     {
+                                       spy.Trip(e);
 
-                                                                 return Task.FromResult(e);
-                                                               })).ShouldBeOfType<Success<PinkLily>>();
+                                       return Task.FromResult(e);
+                                     })).ShouldBeOfType<Success<PinkLily>>();
 
     spy.VerifyTrip(0);
   }
@@ -144,13 +141,13 @@ public sealed class SwitchingTests
   public async Task Fact10()
   {
     (await fail.SelectSwitchAsync(
-                               v => throw new Exception(),
-                               e =>
-                               {
-                                 spy.Trip(e);
+       v => throw new Exception(),
+       e =>
+       {
+         spy.Trip(e);
 
-                                 return Task.FromResult(e);
-                               })).ShouldBeOfType<Error<PinkLily>>();
+         return Task.FromResult(e);
+       })).ShouldBeOfType<Error<PinkLily>>();
 
     spy.VerifyTrip(1, failValue);
   }
@@ -159,11 +156,11 @@ public sealed class SwitchingTests
   public async Task Fact11()
   {
     (await fail.SelectSwitchAsync(v =>
-                                                          {
-                                                            spy.Trip(v);
+                                  {
+                                    spy.Trip(v);
 
-                                                            throw new Exception();
-                                                          })).ShouldBeOfType<Error<PinkLily>>();
+                                    throw new Exception();
+                                  })).ShouldBeOfType<Error<PinkLily>>();
 
     spy.VerifyTrip(0);
   }
@@ -172,11 +169,11 @@ public sealed class SwitchingTests
   public async Task Fact12()
   {
     (await fail.SelectSwitchAsync(e =>
-                                                          {
-                                                            spy.Trip(e);
+                                  {
+                                    spy.Trip(e);
 
-                                                            return Task.FromResult(e);
-                                                          })).ShouldBeOfType<Error<PinkLily>>();
+                                    return Task.FromResult(e);
+                                  })).ShouldBeOfType<Error<PinkLily>>();
 
     spy.VerifyTrip(1, failValue);
   }

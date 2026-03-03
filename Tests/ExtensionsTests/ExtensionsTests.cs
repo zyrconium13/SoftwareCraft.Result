@@ -1,10 +1,11 @@
-﻿namespace Tests.ExtensionsTests;
+﻿// ReSharper disable MemberCanBeFileLocal
+
+namespace Tests.ExtensionsTests;
 
 using Shouldly;
 using SoftwareCraft.Functional;
-using Xunit;
 
-public class ExtensionsTests
+public sealed class ExtensionsTests
 {
   [Fact(DisplayName = "AsSuccess wraps into success Result`2")]
   public void Test1()

@@ -1,7 +1,5 @@
 ﻿namespace Tests.LiftingTests.TestData;
 
-using System;
-using System.Threading.Tasks;
 using SoftwareCraft.Functional;
 
 public class Result1TestDataGeneratorAsFunctionTasks : IGenerator

@@ -1,7 +1,5 @@
 ﻿namespace Tests.LiftingTests.TestData;
 
-using System;
-using System.Threading.Tasks;
 using SampleTypes.Reference;
 using SoftwareCraft.Functional;
 
