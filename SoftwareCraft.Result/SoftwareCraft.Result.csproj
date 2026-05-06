@@ -5,7 +5,7 @@
         <RootNamespace>SoftwareCraft.Functional</RootNamespace>
         <LangVersion>latest</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>6.3.0.0</Version>
+        <Version>6.4.0.0</Version>
         <Authors>SoftwareCraft</Authors>
         <Company>SoftwareCraft</Company>
         <PackageProjectUrl>https://github.com/zyrconium13/SoftwareCraft.Result</PackageProjectUrl>
@@ -14,7 +14,7 @@
         <AssemblyVersion>6.3.0.0</AssemblyVersion>
         <FileVersion>6.3.0.0</FileVersion>
         <Description>SoftwareCraft.Result represents the OOP implementation of a functional concept. Instead of throwing an exception, return a Result, and the code will be much cleaner and the intent much clearer.</Description>
-        <PackageReleaseNotes>Added convenience extension methods to Task&lt;Result&lt;&gt;&gt; to help with method chaining on async pathways. Added five argument Lift methods.</PackageReleaseNotes>
+        <PackageReleaseNotes>Added applicative functor method to Result&lt;TResult, TError&gt;.</PackageReleaseNotes>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
