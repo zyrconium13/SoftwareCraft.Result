@@ -147,11 +147,11 @@ public sealed class Result1_Lift5ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(5, 0);
-    yield return g.Generate(5, 1);
-    yield return g.Generate(5, 2);
-    yield return g.Generate(5, 3);
-    yield return g.Generate(5, 4);
+    yield return g.GenerateSuccessPlusOneError(5, 0);
+    yield return g.GenerateSuccessPlusOneError(5, 1);
+    yield return g.GenerateSuccessPlusOneError(5, 2);
+    yield return g.GenerateSuccessPlusOneError(5, 3);
+    yield return g.GenerateSuccessPlusOneError(5, 4);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -163,11 +163,11 @@ public sealed class Result1_LiftAsync5ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(5, 0);
-    yield return g.Generate(5, 1);
-    yield return g.Generate(5, 2);
-    yield return g.Generate(5, 3);
-    yield return g.Generate(5, 4);
+    yield return g.GenerateSuccessPlusOneError(5, 0);
+    yield return g.GenerateSuccessPlusOneError(5, 1);
+    yield return g.GenerateSuccessPlusOneError(5, 2);
+    yield return g.GenerateSuccessPlusOneError(5, 3);
+    yield return g.GenerateSuccessPlusOneError(5, 4);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -179,11 +179,11 @@ public sealed class Result1_LiftLazy5ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(5, 0);
-    yield return g.Generate(5, 1);
-    yield return g.Generate(5, 2);
-    yield return g.Generate(5, 3);
-    yield return g.Generate(5, 4);
+    yield return g.GenerateSuccessPlusOneError(5, 0);
+    yield return g.GenerateSuccessPlusOneError(5, 1);
+    yield return g.GenerateSuccessPlusOneError(5, 2);
+    yield return g.GenerateSuccessPlusOneError(5, 3);
+    yield return g.GenerateSuccessPlusOneError(5, 4);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -195,11 +195,11 @@ public sealed class Result1_LiftLazyAsync5ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(5, 0);
-    yield return g.Generate(5, 1);
-    yield return g.Generate(5, 2);
-    yield return g.Generate(5, 3);
-    yield return g.Generate(5, 4);
+    yield return g.GenerateSuccessPlusOneError(5, 0);
+    yield return g.GenerateSuccessPlusOneError(5, 1);
+    yield return g.GenerateSuccessPlusOneError(5, 2);
+    yield return g.GenerateSuccessPlusOneError(5, 3);
+    yield return g.GenerateSuccessPlusOneError(5, 4);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

@@ -25,10 +25,28 @@ public static class Result
     , Result<TError> r2)
       => r1.SelectMany(() => r2.Select(() => Success<TError>()));
 
+    public static Result<TError> Lift<TError>(
+      Result<TError>               r1,
+      Result<TError>               r2,
+      Func<TError, TError, TError> combineErrors)
+      => r1.SelectMany(
+        () => r2.Select(() => Success<TError>())
+      , r1Error => r2.SelectMany(() => Error(r1Error)
+                               , r2Error => Error(combineErrors(r1Error, r2Error))));
+
     public static Task<Result<TError>> LiftAsync<TError>(
       Task<Result<TError>> r1
     , Task<Result<TError>> r2)
       => r1.SelectManyAsync(() => r2.Select(() => Success<TError>()));
+
+    public static Task<Result<TError>> LiftAsync<TError>(
+      Task<Result<TError>>         r1,
+      Task<Result<TError>>         r2,
+      Func<TError, TError, TError> combineErrors)
+      => r1.SelectManyAsync(
+        () => r2.Select(() => Success<TError>())
+      , r1Error => r2.SelectMany(() => Error(r1Error)
+                               , r2Error => Error(combineErrors(r1Error, r2Error))));
 
     public static Result<TError> LiftLazy<TError>(
       Func<Result<TError>> r1

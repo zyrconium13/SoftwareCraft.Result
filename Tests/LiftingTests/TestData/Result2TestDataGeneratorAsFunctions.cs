@@ -1,11 +1,12 @@
-﻿namespace Tests.LiftingTests.TestData;
+﻿using SoftwareCraft.Functional;
 
-using SampleTypes.Reference;
-using SoftwareCraft.Functional;
+using Tests.SampleTypes.Reference;
+
+namespace Tests.LiftingTests.TestData;
 
 public sealed class Result2TestDataGeneratorAsFunctions : IGenerator
 {
-  public object[] Generate(int size, int errorPosition)
+  public object[] GenerateSuccessPlusOneError(int size, int errorPosition)
   {
     var array = new object[size];
 
@@ -15,4 +16,10 @@ public sealed class Result2TestDataGeneratorAsFunctions : IGenerator
 
     return array;
   }
+
+  public object[] GenerateAllErrors(int size) =>
+  [
+    .. Enumerable.Range(0, size)
+                 .Select(i => Result.Error<RedDragon, string>($"error{i}"))
+  ];
 }

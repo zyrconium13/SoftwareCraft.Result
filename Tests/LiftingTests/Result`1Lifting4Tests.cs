@@ -139,10 +139,10 @@ public sealed class Result1_Lift4ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(4, 0);
-    yield return g.Generate(4, 1);
-    yield return g.Generate(4, 2);
-    yield return g.Generate(4, 3);
+    yield return g.GenerateSuccessPlusOneError(4, 0);
+    yield return g.GenerateSuccessPlusOneError(4, 1);
+    yield return g.GenerateSuccessPlusOneError(4, 2);
+    yield return g.GenerateSuccessPlusOneError(4, 3);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -154,10 +154,10 @@ public sealed class Result1_LiftAsync4ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(4, 0);
-    yield return g.Generate(4, 1);
-    yield return g.Generate(4, 2);
-    yield return g.Generate(4, 3);
+    yield return g.GenerateSuccessPlusOneError(4, 0);
+    yield return g.GenerateSuccessPlusOneError(4, 1);
+    yield return g.GenerateSuccessPlusOneError(4, 2);
+    yield return g.GenerateSuccessPlusOneError(4, 3);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -169,10 +169,10 @@ public sealed class Result1_LiftLazy4ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(4, 0);
-    yield return g.Generate(4, 1);
-    yield return g.Generate(4, 2);
-    yield return g.Generate(4, 3);
+    yield return g.GenerateSuccessPlusOneError(4, 0);
+    yield return g.GenerateSuccessPlusOneError(4, 1);
+    yield return g.GenerateSuccessPlusOneError(4, 2);
+    yield return g.GenerateSuccessPlusOneError(4, 3);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -184,10 +184,10 @@ public sealed class Result1_LiftLazyAsync4ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(4, 0);
-    yield return g.Generate(4, 1);
-    yield return g.Generate(4, 2);
-    yield return g.Generate(4, 3);
+    yield return g.GenerateSuccessPlusOneError(4, 0);
+    yield return g.GenerateSuccessPlusOneError(4, 1);
+    yield return g.GenerateSuccessPlusOneError(4, 2);
+    yield return g.GenerateSuccessPlusOneError(4, 3);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

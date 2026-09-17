@@ -124,8 +124,8 @@ public sealed class Result2_Lift2ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(2, 0);
-    yield return g.Generate(2, 1);
+    yield return g.GenerateSuccessPlusOneError(2, 0);
+    yield return g.GenerateSuccessPlusOneError(2, 1);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -137,8 +137,8 @@ public sealed class Result2_LiftLazy2ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(2, 0);
-    yield return g.Generate(2, 1);
+    yield return g.GenerateSuccessPlusOneError(2, 0);
+    yield return g.GenerateSuccessPlusOneError(2, 1);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -150,8 +150,8 @@ public sealed class Result2_LiftAsync2ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(2, 0);
-    yield return g.Generate(2, 1);
+    yield return g.GenerateSuccessPlusOneError(2, 0);
+    yield return g.GenerateSuccessPlusOneError(2, 1);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -163,8 +163,8 @@ public sealed class Result2_LiftLazyAsync2ErrorTestData : IEnumerable<object[]>
 
   public IEnumerator<object[]> GetEnumerator()
   {
-    yield return g.Generate(2, 0);
-    yield return g.Generate(2, 1);
+    yield return g.GenerateSuccessPlusOneError(2, 0);
+    yield return g.GenerateSuccessPlusOneError(2, 1);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

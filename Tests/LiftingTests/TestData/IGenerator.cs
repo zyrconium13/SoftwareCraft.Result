@@ -2,5 +2,9 @@
 
 public interface IGenerator
 {
-  object[] Generate(int size, int errorPosition);
+  // object[] GenerateAllSuccesses(int size);
+
+  object[] GenerateSuccessPlusOneError(int size, int errorPosition);
+
+  object[] GenerateAllErrors(int size);
 }

@@ -1,10 +1,10 @@
-﻿namespace Tests.LiftingTests.TestData;
+﻿using SoftwareCraft.Functional;
 
-using SoftwareCraft.Functional;
+namespace Tests.LiftingTests.TestData;
 
 public sealed class Result1TestDataGeneratorAsTasks : IGenerator
 {
-  public object[] Generate(int size, int errorPosition)
+  public object[] GenerateSuccessPlusOneError(int size, int errorPosition)
   {
     var array = new object[size];
 
@@ -14,4 +14,10 @@ public sealed class Result1TestDataGeneratorAsTasks : IGenerator
 
     return array;
   }
+
+  public object[] GenerateAllErrors(int size) =>
+  [
+    .. Enumerable.Range(0, size)
+                 .Select(i => Task.FromResult(Result.Error($"error{i}")))
+  ];
 }
