@@ -23,7 +23,7 @@ public sealed class Result1Lifting3Tests
   }
 
   [Theory(DisplayName = "Lifting over error results returns an error")]
-  [ClassData(typeof(Result1_Lift3ErrorTestData))]
+  [ClassData(typeof(Result1_Lift3_SingleErrorTestData))]
   public void Test12(
     Result<string> r1,
     Result<string> r2,
@@ -33,6 +33,44 @@ public sealed class Result1Lifting3Tests
 
     lift.IsSuccess.ShouldBeFalse();
     lift.OnError(e => e.ShouldBe("error"));
+  }
+
+  [Fact(DisplayName = "CombineErrors - Lifting over three successes returns success")]
+  public void Test51()
+  {
+    var r1 = Result.Success<IEnumerable<PinkLily>>();
+    var r2 = Result.Success<IEnumerable<PinkLily>>();
+    var r3 = Result.Success<IEnumerable<PinkLily>>();
+
+    var lift = Result.Lifting.Lift(r1, r2, r3, (e1, e2) => e1.Concat(e2));
+
+    lift.IsSuccess.ShouldBeTrue();
+  }
+
+  [Theory(DisplayName = "Lifting over error results returns an error")]
+  [ClassData(typeof(Result1_Lift3_SingleErrorTestData))]
+  public void Test52(
+    Result<string> r1,
+    Result<string> r2,
+    Result<string> r3)
+  {
+    var lift = Result.Lifting.Lift(r1, r2, r3, (e1, e2) => e1 + e2);
+
+    lift.IsSuccess.ShouldBeFalse();
+    lift.OnError(e => e.ShouldBe("error"));
+  }
+
+  [Theory(DisplayName = "Lifting over error results returns an error")]
+  [ClassData(typeof(Result1_Lift3_AllErrorTestData))]
+  public void Test53(
+    Result<string> r1,
+    Result<string> r2,
+    Result<string> r3)
+  {
+    var lift = Result.Lifting.Lift(r1, r2, r3, (e1, e2) => e1 + e2);
+
+    lift.IsSuccess.ShouldBeFalse();
+    lift.OnError(e => e.ShouldBe("error0error1error2"));
   }
 
   #endregion
@@ -125,7 +163,7 @@ public sealed class Result1Lifting3Tests
   #endregion
 }
 
-public sealed class Result1_Lift3ErrorTestData : IEnumerable<object[]>
+public sealed class Result1_Lift3_SingleErrorTestData : IEnumerable<object[]>
 {
   private readonly IGenerator g = Result1TestDataGenerator.AsResults();
 
@@ -134,6 +172,18 @@ public sealed class Result1_Lift3ErrorTestData : IEnumerable<object[]>
     yield return g.GenerateSuccessPlusOneError(3, 0);
     yield return g.GenerateSuccessPlusOneError(3, 1);
     yield return g.GenerateSuccessPlusOneError(3, 2);
+  }
+
+  IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+public sealed class Result1_Lift3_AllErrorTestData : IEnumerable<object[]>
+{
+  private readonly IGenerator g = Result1TestDataGenerator.AsResults();
+
+  public IEnumerator<object[]> GetEnumerator()
+  {
+    yield return g.GenerateAllErrors(3);
   }
 
   IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

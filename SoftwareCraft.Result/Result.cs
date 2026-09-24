@@ -29,10 +29,10 @@ public static class Result
       Result<TError>               r1,
       Result<TError>               r2,
       Func<TError, TError, TError> combineErrors)
-      => r1.SelectMany(
-        () => r2.Select(() => Success<TError>())
-      , r1Error => r2.SelectMany(() => Error(r1Error)
-                               , r2Error => Error(combineErrors(r1Error, r2Error))));
+      => r1.Match(
+        () => r2
+      , e1 => r2.Match(() => r1
+                     , e2 => Error(combineErrors(e1, e2))));
 
     public static Task<Result<TError>> LiftAsync<TError>(
       Task<Result<TError>> r1
@@ -96,6 +96,13 @@ public static class Result
     , Result<TError> r3)
       => r1.SelectMany(() => r2.SelectMany(() => r3.Select(() => Success<TError>())));
 
+    public static Result<TError> Lift<TError>(
+      Result<TError>               r1,
+      Result<TError>               r2,
+      Result<TError>               r3,
+      Func<TError, TError, TError> combineErrors)
+      => Lift(Lift(r1, r2, combineErrors), r3, combineErrors);
+
     public static Result<TError> LiftLazy<TError>(
       Func<Result<TError>> r1
     , Func<Result<TError>> r2
@@ -156,6 +163,14 @@ public static class Result
     , Result<TError> r3
     , Result<TError> r4)
       => r1.SelectMany(() => r2.SelectMany(() => r3.SelectMany(() => r4.Select(() => Success<TError>()))));
+
+    public static Result<TError> Lift<TError>(
+      Result<TError>               r1,
+      Result<TError>               r2,
+      Result<TError>               r3,
+      Result<TError>               r4,
+      Func<TError, TError, TError> combineErrors)
+      => Lift(Lift(Lift(r1, r2, combineErrors), r3, combineErrors), r4, combineErrors);
 
     public static Task<Result<TError>> LiftAsync<TError>(
       Task<Result<TError>> r1
@@ -226,6 +241,15 @@ public static class Result
     , Result<TError> r4
     , Result<TError> r5)
       => r1.SelectMany(() => r2.SelectMany(() => r3.SelectMany(() => r4.SelectMany(() => r5.Select(() => Success<TError>())))));
+
+    public static Result<TError> Lift<TError>(
+      Result<TError>               r1,
+      Result<TError>               r2,
+      Result<TError>               r3,
+      Result<TError>               r4,
+      Result<TError>               r5,
+      Func<TError, TError, TError> combineErrors)
+      => Lift(Lift(Lift(Lift(r1, r2, combineErrors), r3, combineErrors), r4, combineErrors), r5, combineErrors);
 
     public static Task<Result<TError>> LiftAsync<TError>(
       Task<Result<TError>> r1
