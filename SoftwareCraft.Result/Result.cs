@@ -67,6 +67,19 @@ public static class Result
     , Result<T2, TError> r2)
       => r1.SelectMany(t1 => r2.Select<Tuple<T1, T2>>(t2 => Tuple.Create(t1, t2)));
 
+    public static Result<Tuple<T1, T2>, TError> Lift<T1, T2, TError>(
+      Result<T1, TError>           r1,
+      Result<T2, TError>           r2,
+      Func<TError, TError, TError> combineErrors)
+    {
+      return r1
+            .Select(CreateTuple())
+            .Apply(r2, combineErrors);
+
+      static Func<T1, Func<T2, Tuple<T1, T2>>> CreateTuple()
+        => t1 => t2 => Tuple.Create(t1, t2);
+    }
+
     public static Task<Result<Tuple<T1, T2>, TError>> LiftAsync<T1, T2, TError>(
       Task<Result<T1, TError>> r1
     , Task<Result<T2, TError>> r2)
@@ -130,6 +143,23 @@ public static class Result
     , Result<T2, TError> r2
     , Result<T3, TError> r3)
       => r1.SelectMany(t1 => r2.SelectMany(t2 => r3.Select(t3 => new Tuple<T1, T2, T3>(t1, t2, t3))));
+
+    public static Result<Tuple<T1, T2, T3>, TError> Lift<T1, T2, T3, TError>(
+      Result<T1, TError>           r1,
+      Result<T2, TError>           r2,
+      Result<T3, TError>           r3,
+      Func<TError, TError, TError> combineErrors)
+    {
+      return Success<
+               Func<T1, Func<T2, Func<T3, Tuple<T1, T2, T3>>>>,
+               TError>(CreateTuple)
+            .Apply(r1, combineErrors)
+            .Apply(r2, combineErrors)
+            .Apply(r3, combineErrors);
+
+      static Func<T2, Func<T3, Tuple<T1, T2, T3>>> CreateTuple(T1 v1)
+        => v2 => v3 => Tuple.Create(v1, v2, v3);
+    }
 
     public static Task<Result<Tuple<T1, T2, T3>, TError>> LiftAsync<T1, T2, T3, TError>(
       Task<Result<T1, TError>> r1
@@ -203,6 +233,25 @@ public static class Result
     , Result<T3, TError> r3
     , Result<T4, TError> r4)
       => r1.SelectMany(t1 => r2.SelectMany(t2 => r3.SelectMany(t3 => r4.Select(t4 => new Tuple<T1, T2, T3, T4>(t1, t2, t3, t4)))));
+
+    public static Result<Tuple<T1, T2, T3, T4>, TError> Lift<T1, T2, T3, T4, TError>(
+      Result<T1, TError>           r1,
+      Result<T2, TError>           r2,
+      Result<T3, TError>           r3,
+      Result<T4, TError>           r4,
+      Func<TError, TError, TError> combineErrors)
+    {
+      return Success<
+               Func<T1, Func<T2, Func<T3, Func<T4, Tuple<T1, T2, T3, T4>>>>>,
+               TError>(CreateTuple)
+            .Apply(r1, combineErrors)
+            .Apply(r2, combineErrors)
+            .Apply(r3, combineErrors)
+            .Apply(r4, combineErrors);
+
+      static Func<T2, Func<T3, Func<T4, Tuple<T1, T2, T3, T4>>>> CreateTuple(T1 v1)
+        => v2 => v3 => v4 => Tuple.Create(v1, v2, v3, v4);
+    }
 
     public static Task<Result<Tuple<T1, T2, T3, T4>, TError>> LiftAsync<T1, T2, T3, T4, TError>(
       Task<Result<T1, TError>> r1
@@ -290,6 +339,27 @@ public static class Result
                          r2.SelectMany(t2 =>
                                          r3.SelectMany(t3 =>
                                                          r4.SelectMany(t4 => r5.Select(t5 => new Tuple<T1, T2, T3, T4, T5>(t1, t2, t3, t4, t5))))));
+
+    public static Result<Tuple<T1, T2, T3, T4, T5>, TError> Lift<T1, T2, T3, T4, T5, TError>(
+      Result<T1, TError>           r1,
+      Result<T2, TError>           r2,
+      Result<T3, TError>           r3,
+      Result<T4, TError>           r4,
+      Result<T5, TError>           r5,
+      Func<TError, TError, TError> combineErrors)
+    {
+      return Success<
+               Func<T1, Func<T2, Func<T3, Func<T4, Func<T5, Tuple<T1, T2, T3, T4, T5>>>>>>,
+               TError>(CreateTuple)
+            .Apply(r1, combineErrors)
+            .Apply(r2, combineErrors)
+            .Apply(r3, combineErrors)
+            .Apply(r4, combineErrors)
+            .Apply(r5, combineErrors);
+
+      static Func<T2, Func<T3, Func<T4, Func<T5, Tuple<T1, T2, T3, T4, T5>>>>> CreateTuple(T1 v1)
+        => v2 => v3 => v4 => v5 => Tuple.Create(v1, v2, v3, v4, v5);
+    }
 
     public static Task<Result<Tuple<T1, T2, T3, T4, T5>, TError>> LiftAsync<T1, T2, T3, T4, T5, TError>(
       Task<Result<T1, TError>> r1
